@@ -10,7 +10,6 @@ export const getTeams = asyncHandler(async (req, res) => {
 // Controller to add a new team
 export const addTeam = asyncHandler(async (req, res) => {
     const { name } = req.body;
-
     const team = await Team.create({ name });
 
     res.status(201).json({ team });

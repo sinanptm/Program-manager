@@ -1,5 +1,6 @@
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { Participant } from '../models/participant.js';
+import { Team } from '../models/team.js';
 
 export const getParticipants = asyncHandler(async (req, res) => {
     const participants = await Participant.find();
@@ -8,12 +9,17 @@ export const getParticipants = asyncHandler(async (req, res) => {
 
 export const addParticipant = asyncHandler(async (req, res) => {
     const { name, team, category } = req.body;
-
     const participant = await Participant.create({
         name,
         team,
         category,
     });
+
+    await Team.findByIdAndUpdate(
+        team,
+        { $push: { members: participant._id } }, 
+        { new: true } 
+    );
 
     res.status(201).json({ participant });
 });

@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-e
+
 // Program Schema
 const programSchema = new Schema({
     name: {
@@ -49,7 +49,7 @@ const programSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ['on-stage', 'offstage', 'online'],
+        enum: ['on-stage', 'off-stage', 'online'],
         required:true
     },
 }, { timestamps: true });
