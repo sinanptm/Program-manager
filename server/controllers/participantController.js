@@ -1,4 +1,4 @@
-import { asyncHandler } from '../utils/asyncHandler.js';
+import  asyncHandler  from 'express-async-handler';
 import { Participant } from '../models/participant.js';
 import { Team } from '../models/team.js';
 import { Program } from '../models/program.js'
@@ -62,12 +62,15 @@ export const deleteParticipant = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
     const participant = await Participant.findByIdAndDelete(id);
-
     if (!participant) {
         return res.status(404).json({ message: 'Participant not found' });
+    }
+    const team = await Team.findOne({ members: participant._id });
+    if (team) {
+        team.members = team.members.filter(memberId => memberId.toString() !== participant._id.toString());
+        await team.save();
     }
 
     res.status(200).json({ message: 'Participant deleted successfully' });
 });
-
 

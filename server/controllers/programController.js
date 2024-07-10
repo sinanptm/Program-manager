@@ -1,4 +1,4 @@
-import { asyncHandler } from '../utils/asyncHandler.js';
+import  asyncHandler  from 'express-async-handler';
 import { Program } from '../models/program.js';
 import { Participant } from '../models/participant.js';
 import { Team } from '../models/team.js';

@@ -1,4 +1,4 @@
-import { asyncHandler } from '../utils/asyncHandler.js';
+import  asyncHandler  from 'express-async-handler';
 import { Team } from '../models/team.js';
 
 export const getTeams = asyncHandler(async (req, res) => {

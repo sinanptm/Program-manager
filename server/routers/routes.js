@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { getTeams, addTeam, updateTeam, deleteTeam } from '../controllers/teamController.js';
-import { getPrograms, addProgram, updateProgram, deleteProgram, setWinners } from '../controllers/programController.js';
+import { getPrograms, addProgram, updateProgram, deleteProgram, setWinners  } from '../controllers/programController.js';
 import { getParticipants, addParticipant, updateParticipant, deleteParticipant, addProgramToParticipant } from '../controllers/participantController.js';
 
-const router = Router();
+export const router = Router();
 
 // Team routes
 router.get('/teams', getTeams);             // GET /api/teams
@@ -24,5 +24,3 @@ router.post('/participants', addParticipant);                             // POS
 router.put('/participants/add-program/:id', addProgramToParticipant);     // POST /api/participants
 router.put('/participants/:id', updateParticipant);                       // PUT /api/participants/:id
 router.delete('/participants/:id', deleteParticipant);                    // DELETE /api/participants/:id
-
-export default router;
