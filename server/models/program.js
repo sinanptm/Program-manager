@@ -10,7 +10,7 @@ const programSchema = new Schema({
     category: {
         type: String,
         required: true,
-        enum:['lp','up','hs','hss','junior']
+        enum: ['lp', 'up', 'hs', 'hss', 'junior']
     },
     status: {
         type: String,
@@ -20,8 +20,14 @@ const programSchema = new Schema({
     type: {
         type: String,
         enum: ['on-stage', 'off-stage', 'online'],
-        required:true
+        required: true
     },
+    participants: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Participant",
+        },
+    ],
     firstPlace: {
         participant: {
             type: Schema.Types.ObjectId,
