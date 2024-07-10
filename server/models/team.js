@@ -12,14 +12,8 @@ const teamSchema = new Schema({
     },
     members: [
         {
-            participant: {
-                type: Schema.Types.ObjectId,
-                ref: "Participant",
-            },
-            points: {
-                type: Number,
-                default: 0,
-            },
+            type: Schema.Types.ObjectId,
+            ref: "Participant",
         },
     ],
 });

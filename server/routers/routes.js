@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getTeams, addTeam, updateTeam, deleteTeam } from '../controllers/teamController.js';
-import { getPrograms, addProgram, updateProgram, deleteProgram } from '../controllers/programController.js';
+import { getPrograms, addProgram, updateProgram, deleteProgram, setWinners } from '../controllers/programController.js';
 import { getParticipants, addParticipant, updateParticipant, deleteParticipant } from '../controllers/participantController.js';
 
 const router = Router();
@@ -12,10 +12,11 @@ router.put('/teams/:id', updateTeam);       // PUT /api/teams/:id
 router.delete('/teams/:id', deleteTeam);    // DELETE /api/teams/:id
 
 // Program routes
-router.get('/programs', getPrograms);             // GET /api/programs
-router.post('/programs', addProgram);             // POST /api/programs
-router.put('/programs/:id', updateProgram);       // PUT /api/programs/:id
-router.delete('/programs/:id', deleteProgram);    // DELETE /api/programs/:id
+router.get('/programs', getPrograms);                   // GET /api/programs
+router.post('/programs', addProgram);                   // POST /api/programs
+router.put('/programs/set-winner', setWinners)          // PUT /api/programs
+router.put('/programs/:id', updateProgram);             // PUT /api/programs/:id
+router.delete('/programs/:id', deleteProgram);          // DELETE /api/programs/:id
 
 // Participant routes
 router.get('/participants', getParticipants);             // GET /api/participants

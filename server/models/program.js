@@ -12,6 +12,16 @@ const programSchema = new Schema({
         required: true,
         enum:['lp','up','hs','hss','junior']
     },
+    status: {
+        type: String,
+        enum: ['done', 'evaluating', 'waiting'],
+        default: 'waiting',
+    },
+    type: {
+        type: String,
+        enum: ['on-stage', 'off-stage', 'online'],
+        required:true
+    },
     firstPlace: {
         participant: {
             type: Schema.Types.ObjectId,
@@ -41,16 +51,6 @@ const programSchema = new Schema({
             type: Number,
             default: 0,
         },
-    },
-    status: {
-        type: String,
-        enum: ['done', 'evaluating', 'waiting'],
-        default: 'waiting',
-    },
-    type: {
-        type: String,
-        enum: ['on-stage', 'off-stage', 'online'],
-        required:true
     },
 }, { timestamps: true });
 
