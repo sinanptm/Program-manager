@@ -2,6 +2,7 @@ import  asyncHandler  from 'express-async-handler';
 import { Team } from '../models/team.js';
 
 export const getTeams = asyncHandler(async (req, res) => {
+    console.log('ss');
     const teams = await Team.find();
     res.status(200).json({ teams });
 });

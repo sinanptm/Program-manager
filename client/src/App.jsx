@@ -1,29 +1,25 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React from 'react';
+import { useGetTeamsQuery } from './slices/teamsApiSlice';
 
 const App = () => {
-  const [data, setData] = useState("");
-  const [loading, setLoading] = useState(true)
+  const { data: teams, error, isLoading } = useGetTeamsQuery(); // No need for 'id' here
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/api/fs");
-        setData(res.data.data);
-        setLoading(false)
-      } catch (error) {
-        setData(`Error: ${error.message}`);
-      }
-    };
+  if (error) return <h3>{error.message}</h3>; // Ensure error is properly accessed
 
-    fetchData();
-  }, []);
-
-  if(loading) return <h4>Loading.....</h4>
-
+  if (isLoading) return <h5>Loading...</h5>;
+console.log(teams);
   return (
     <div>
-      {data}
+      <h1>Teams</h1>
+      {teams?.length > 0 ? (
+        <ul>
+          {teams.map(team => (
+            <li key={team.id}>{team.name}</li> // Ensure team object structure
+          ))}
+        </ul>
+      ) : (
+        <p>No teams available</p>
+      )}
     </div>
   );
 };
