@@ -1,8 +1,8 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import AddTeamModal from './modals/AddTeamModal';
 import Alert from '@mui/material/Alert';
+import AddTeamModal from '../modals/AddTeamModal';
 import { useGetTeamsQuery, useDeleteTeamMutation } from '../../slices/teamsApiSlice';
 import { useState } from 'react';
 import TeamList from '../lists/TeamList'
@@ -35,7 +35,7 @@ const TeamsList = () => {
         Add Team
       </Button>
       {isError && <Alert severity="error">{deleteError.data.message}</Alert>}
-      <TeamList teams={teams} isDelete={true} />
+      <TeamList teams={teams} isDelete={true} handleRemove={handleRemoveTeam} />
       <AddTeamModal open={open} handleClose={handleClose} />
     </>
   );

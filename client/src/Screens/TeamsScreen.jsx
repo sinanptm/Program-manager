@@ -17,7 +17,7 @@ const TeamScreen = () => {
     return (
         <>
         <Typography variant="h4" align="center" gutterBottom>
-              Team List
+              Teams
         </Typography>
          <TeamList teams={teams} />
         </>

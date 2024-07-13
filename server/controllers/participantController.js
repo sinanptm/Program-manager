@@ -72,18 +72,34 @@ export const addProgramToParticipant = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { programId } = req.body;
 
-    const participant = await Participant.findById(id);
-    const program = await Program.findById(programId);
-    if (!participant || !program) return res.status(404).json({ message: "Not Found" });
+    try {
+        const participant = await Participant.findById(id);
+        const program = await Program.findById(programId);
 
-    participant.programs.push(programId);
-    program.participants.push(participant._id);
+        if (!participant || !program) {
+            return res.status(404).json({ message: "Participant or Program not found" });
+        }
 
-    await participant.save();
-    await program.save();
+        const existingProgram = participant.programs.find(item =>  item?.program?.toString() === programId);
+        if (existingProgram) {
+            return res.status(402).json({ message: 'This program is already registered for the participant' });
+        }
 
-    res.status(200).json({ program: transformId(program), participant: transformId(participant) });
+        participant.programs.push({ program: programId });
+        program.participants.push(id);
+
+        await participant.save();
+        await program.save();
+
+        res.status(200).json({ program: transformId(program), participant: transformId(participant) });
+    } catch (error) {
+        console.error('Error adding program to participant:', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 });
+
+
+
 
 export const deleteParticipant = asyncHandler(async (req, res) => {
     const { id } = req.params;

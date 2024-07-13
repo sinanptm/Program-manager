@@ -9,7 +9,8 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
 
-const TeamList = ({teams,isDelete=false}) => {
+
+const TeamList = ({teams,isDelete=false, handleRemove}) => {
   return (
     <div>
         <TableContainer component={Paper}>
@@ -24,6 +25,7 @@ const TeamList = ({teams,isDelete=false}) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
+
                     {teams.map((team, index) => (
                         <TableRow key={team.id}>
                             <TableCell component="th" scope="row">
@@ -34,7 +36,7 @@ const TeamList = ({teams,isDelete=false}) => {
                             <TableCell align="right">{team.members.length}</TableCell>
                             {isDelete&&(
                                 <TableCell align="right">
-                                    <Button variant="contained" color="secondary" onClick={() => handleRemoveTeam(team.id)}>
+                                    <Button variant="contained" color="secondary" onClick={() => handleRemove(team.id)}>
                                       Remove
                                     </Button>
                                 </TableCell>

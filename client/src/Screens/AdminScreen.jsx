@@ -6,7 +6,7 @@ import Login from "../components/Admin/Login";
 import EditTeams from "../components/Admin/EditTeams";
 import EditParticipants from "../components/Admin/EditParticipants";
 import EditPrograms from "../components/Admin/EditPrograms";
-import AdminOutlet from "../components/Admin/AdminOutlet";
+import AdminOutlet from "../components/AdminOutlet";
 
 const Admin = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -19,6 +19,7 @@ const Admin = () => {
     <div>
       <Routes>
         <Route path="/" element={<AdminOutlet />}>
+          <Route path="" element={<EditParticipants />} />
           <Route path="teams" element={<EditTeams />} />
           <Route path="participants" element={<EditParticipants />} />
           <Route path="programs" element={<EditPrograms />} />
