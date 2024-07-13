@@ -1,19 +1,20 @@
-// store/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import teamsApiSlice from '../slices/teamsApiSlice';
-import programsApiSlice from '../slices/programsApiSlice';
-import participantsApiSlice from '../slices/participantsApiSlice';
+import { participantsApiSlice } from '../slices/participantsApiSlice';
+import { programsApiSlice } from '../slices/programsApiSlice';
+import { teamsApiSlice } from '../slices/teamsApiSlice';
+import adminSlice from '../slices/adminSlice'; // Ensure this path is correct
 
 export const store = configureStore({
     reducer: {
-        [teamsApiSlice.reducerPath]: teamsApiSlice.reducer,
-        [programsApiSlice.reducerPath]: programsApiSlice.reducer,
+        admin: adminSlice,
         [participantsApiSlice.reducerPath]: participantsApiSlice.reducer,
+        [programsApiSlice.reducerPath]: programsApiSlice.reducer,
+        [teamsApiSlice.reducerPath]: teamsApiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware()
-            .concat(teamsApiSlice.middleware)
-            .concat(programsApiSlice.middleware)
-            .concat(participantsApiSlice.middleware),
-    devTools: true,
+        getDefaultMiddleware().concat(
+            participantsApiSlice.middleware,
+            programsApiSlice.middleware,
+            teamsApiSlice.middleware
+        ),
 });

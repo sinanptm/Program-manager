@@ -1,11 +1,38 @@
-import  asyncHandler  from 'express-async-handler';
+import asyncHandler from 'express-async-handler';
 import { Participant } from '../models/participant.js';
 import { Team } from '../models/team.js';
-import { Program } from '../models/program.js'
+import { Program } from '../models/program.js';
+import { transformId } from '../utils/transformId.js';
 
 export const getParticipants = asyncHandler(async (req, res) => {
-    const participants = await Participant.find();
-    res.status(200).json({ participants });
+    let participants = await Participant.find();
+
+    participants = transformId(participants);
+
+    const participantsWithDetails = await Promise.all(participants.map(async (participant) => {
+        const { team, programs, ...rest } = participant;
+
+        const teamDoc = await Team.findById(team, { _id: 0, name: 1 });
+        const teamName = teamDoc ? teamDoc.name : null;
+
+        const programDetails = await Promise.all(programs.map(async (programObj) => {
+            const programId = programObj._id;
+            const programDoc = await Program.findById(programId, { _id: 0, name: 1 });
+            return {
+                id: programId,
+                name: programDoc ? programDoc.name : null
+            };
+        }));
+
+        return {
+            team,
+            programs: programDetails,
+            ...rest,
+            teamName
+        };
+    }));
+
+    res.status(200).json({ participants: participantsWithDetails });
 });
 
 export const addParticipant = asyncHandler(async (req, res) => {
@@ -22,7 +49,7 @@ export const addParticipant = asyncHandler(async (req, res) => {
         { new: true }
     );
 
-    res.status(201).json({ participant });
+    res.status(201).json({ participant: transformId(participant) });
 });
 
 export const updateParticipant = asyncHandler(async (req, res) => {
@@ -38,7 +65,7 @@ export const updateParticipant = asyncHandler(async (req, res) => {
 
     await participant.save();
 
-    res.status(200).json({ participant });
+    res.status(200).json({ participant: transformId(participant) });
 });
 
 export const addProgramToParticipant = asyncHandler(async (req, res) => {
@@ -55,7 +82,7 @@ export const addProgramToParticipant = asyncHandler(async (req, res) => {
     await participant.save();
     await program.save();
 
-    res.status(200).json({ program, participant })
+    res.status(200).json({ program: transformId(program), participant: transformId(participant) });
 });
 
 export const deleteParticipant = asyncHandler(async (req, res) => {
@@ -73,4 +100,3 @@ export const deleteParticipant = asyncHandler(async (req, res) => {
 
     res.status(200).json({ message: 'Participant deleted successfully' });
 });
-

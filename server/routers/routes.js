@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTeams, addTeam, updateTeam, deleteTeam } from '../controllers/teamController.js';
+import { getTeams, addTeam, deleteTeam } from '../controllers/teamController.js';
 import { getPrograms, addProgram, updateProgram, deleteProgram, setWinners  } from '../controllers/programController.js';
 import { getParticipants, addParticipant, updateParticipant, deleteParticipant, addProgramToParticipant } from '../controllers/participantController.js';
 
@@ -8,7 +8,6 @@ export const router = Router();
 // Team routes
 router.get('/teams', getTeams);             // GET /api/teams
 router.post('/teams', addTeam);             // POST /api/teams
-router.put('/teams/:id', updateTeam);       // PUT /api/teams/:id
 router.delete('/teams/:id', deleteTeam);    // DELETE /api/teams/:id
 
 // Program routes

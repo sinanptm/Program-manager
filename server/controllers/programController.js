@@ -1,12 +1,13 @@
-import  asyncHandler  from 'express-async-handler';
+import asyncHandler from 'express-async-handler';
 import { Program } from '../models/program.js';
 import { Participant } from '../models/participant.js';
 import { Team } from '../models/team.js';
+import { transformId } from '../utils/transformId.js';
 
 // Controller to get all programs
 export const getPrograms = asyncHandler(async (req, res) => {
     const programs = await Program.find();
-    res.status(200).json({ programs });
+    res.status(200).json({ programs: transformId(programs) });
 });
 
 // Controller to add a new program
@@ -15,7 +16,7 @@ export const addProgram = asyncHandler(async (req, res) => {
 
     const program = await Program.create({ name, category, type });
 
-    res.status(201).json({ program });
+    res.status(201).json({ program: transformId(program) });
 });
 
 // Controller to update a program
@@ -29,7 +30,7 @@ export const updateProgram = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: 'Program not found' });
     }
 
-    res.status(200).json({ program });
+    res.status(200).json({ program: transformId(program) });
 });
 
 // Controller to delete a program
@@ -44,7 +45,6 @@ export const deleteProgram = asyncHandler(async (req, res) => {
 
     res.status(200).json({ message: 'Program deleted successfully' });
 });
-
 
 // Controller to set winners for a program
 export const setWinners = asyncHandler(async (req, res) => {
@@ -63,20 +63,20 @@ export const setWinners = asyncHandler(async (req, res) => {
     const updateParticipantPoints = async (place) => {
         const participant = await Participant.findById(place.participant);
         if (!participant) {
-            return { error: `Participant not found` };
+            return { error: 'Participant not found' };
         }
         participant.points += place.points;
 
         const team = await Team.findById(participant.team);
         if (!team) {
-            return { error: `Team not found` };
+            return { error: 'Team not found' };
         }
         team.points += place.points;
 
         await participant.save();
         await team.save();
 
-        return { participant, team };
+        return { participant: transformId(participant), team: transformId(team) };
     };
 
     const results = {};
@@ -102,7 +102,7 @@ export const setWinners = asyncHandler(async (req, res) => {
     await program.save();
 
     res.status(200).json({
-        program,
+        program: transformId(program),
         ...results,
     });
 });
