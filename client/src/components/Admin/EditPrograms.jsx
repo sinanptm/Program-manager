@@ -11,7 +11,6 @@ import { useGetProgramsQuery } from '../../slices/programsApiSlice';
 import { useState } from 'react';
 import ProgramList from '../lists/ProgramList';
 
-
 const EditPrograms = () => {
   const { data, error, isLoading } = useGetProgramsQuery();
   const programs = data?.programs;
@@ -36,6 +35,8 @@ const EditPrograms = () => {
       (categoryFilter === '' || program.category === categoryFilter)
     );
   });
+
+  const sortedPrograms = filteredPrograms?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   if (isLoading) return <CircularProgress />;
 
@@ -76,7 +77,7 @@ const EditPrograms = () => {
         </div>
       </div>
       {error && <Alert severity="error">{error}</Alert>}
-      <ProgramList programs={filteredPrograms} isAdmin={true} />
+      <ProgramList programs={sortedPrograms} isAdmin={true} />
       <AddProgramModal open={open} handleClose={handleClose} />
     </>
   );

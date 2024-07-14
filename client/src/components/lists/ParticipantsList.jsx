@@ -19,7 +19,7 @@ const ParticipantsList = ({  participants,  actions,  handleRemove,  handleAddPr
               <TableCell>Name</TableCell>
               <TableCell>Team</TableCell>
               <TableCell align="left">Points</TableCell>
-              <TableCell>Programs</TableCell>
+              {/* <TableCell>Programs</TableCell> */}
               <TableCell>Category</TableCell>
               {actions && <TableCell align="right">Actions</TableCell>}
             </TableRow>
@@ -31,14 +31,14 @@ const ParticipantsList = ({  participants,  actions,  handleRemove,  handleAddPr
                 <TableCell>{participant.name}</TableCell>
                 <TableCell>{participant.teamName}</TableCell>
                 <TableCell align="left">{participant.points}</TableCell>
-                <TableCell>
+                {/* <TableCell>
                   {participant.programs.map((program, idx) => (
                     <span key={program.id}>
                       {program.name}
                       {idx < participant.programs.length - 1 && ", "}
                     </span>
                   ))}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>{participant.category}</TableCell>
                 {actions && (
                   <TableCell align="right">

@@ -24,6 +24,8 @@ const EditTeam = () => {
     }
   };
 
+  const sortedTeams = teams ? [...teams].sort((a, b) => b.points - a.points) : [];
+
   if (isLoading) return <CircularProgress />;
 
   return (
@@ -34,8 +36,8 @@ const EditTeam = () => {
       <Button variant="contained" color="primary" onClick={handleOpen} style={{ marginBottom: '16px' }}>
         Add Team
       </Button>
-      {isError && <Alert severity="error">{deleteError.data.message}</Alert>}
-      <TeamList teams={teams} isDelete={true} handleRemove={handleRemoveTeam} isAdmin={true} />
+      {isError && <Alert severity="error">{deleteError?.data?.message}</Alert>}
+      <TeamList teams={sortedTeams} isDelete={true} handleRemove={handleRemoveTeam} isAdmin={true} />
       <AddTeamModal open={open} handleClose={handleClose} />
     </>
   );
