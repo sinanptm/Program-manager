@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { useAddProgramMutation } from '../../../slices/programsApiSlice'; 
+import { useAddProgramMutation } from '../../slices/programsApiSlice';
 
 const style = {
   position: 'absolute',
@@ -26,14 +26,27 @@ const AddProgramModal = ({ open, handleClose }) => {
   const [programName, setProgramName] = useState('');
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
-  const [mutate] = useAddProgramMutation(); 
+  const [errors, setErrors] = useState({});
+
+  const [mutate] = useAddProgramMutation();
+
+  const validate = () => {
+    const newErrors = {};
+    if (!programName) newErrors.programName = 'Program name is required';
+    if (!category) newErrors.category = 'Category selection is required';
+    if (!type) newErrors.type = 'Type selection is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const onAddProgram = async () => {
+    if (!validate()) return;
     try {
       await mutate({ name: programName, category, type });
       setProgramName('');
       setCategory('');
       setType('');
+      setErrors({});
       handleClose();
     } catch (error) {
       console.error('Error adding program:', error);
@@ -61,8 +74,10 @@ const AddProgramModal = ({ open, handleClose }) => {
           autoFocus
           value={programName}
           onChange={(e) => setProgramName(e.target.value)}
+          error={!!errors.programName}
+          helperText={errors.programName}
         />
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="normal" required error={!!errors.category}>
           <InputLabel id="category-label">Category</InputLabel>
           <Select
             labelId="category-label"
@@ -77,8 +92,13 @@ const AddProgramModal = ({ open, handleClose }) => {
             <MenuItem value="hss">HSS</MenuItem>
             <MenuItem value="junior">Junior</MenuItem>
           </Select>
+          {errors.category && (
+            <Typography color="error" variant="caption">
+              {errors.category}
+            </Typography>
+          )}
         </FormControl>
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="normal" required error={!!errors.type}>
           <InputLabel id="type-label">Type</InputLabel>
           <Select
             labelId="type-label"
@@ -91,6 +111,11 @@ const AddProgramModal = ({ open, handleClose }) => {
             <MenuItem value="off-stage">Off-Stage</MenuItem>
             <MenuItem value="online">Online</MenuItem>
           </Select>
+          {errors.type && (
+            <Typography color="error" variant="caption">
+              {errors.type}
+            </Typography>
+          )}
         </FormControl>
         <Button
           variant="contained"

@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { store } from "./app/store.js";
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './index.css';
 import App from "./App.jsx";
 import LoadingFallback from "./components/LoadingFallback"; 
@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Router>
         <Routes>
           <Route path="/" element={<App />}>
-            <Route path="/" element={<Suspense fallback={<LoadingFallback />}><TeamsList /></Suspense>} />
+          <Route index element={<Navigate to="teams" />} />
             <Route path="teams" element={<Suspense fallback={<LoadingFallback />}><TeamsList /></Suspense>} />
             <Route path="programs" element={<Suspense fallback={<LoadingFallback />}><ProgramsList /></Suspense>} />
             <Route path="participants" element={<Suspense fallback={<LoadingFallback />}><ParticipantsList /></Suspense>} />

@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 
 
 
-const TeamList = ({teams,isDelete=false, handleRemove}) => {
+const TeamList = ({teams,isDelete=false, handleRemove,isAdmin=false}) => {
   return (
     <div>
         <TableContainer component={Paper}>
@@ -20,7 +20,7 @@ const TeamList = ({teams,isDelete=false, handleRemove}) => {
                         <TableCell>#</TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell align="right">Points</TableCell>
-                        <TableCell align="right">Members</TableCell>
+                         <TableCell align="right">{isAdmin&&'Members'}</TableCell>
                         {isDelete&& <TableCell align="right">Actions</TableCell>}
                     </TableRow>
                 </TableHead>
@@ -33,7 +33,7 @@ const TeamList = ({teams,isDelete=false, handleRemove}) => {
                             </TableCell>
                             <TableCell>{team.name}</TableCell>
                             <TableCell align="right">{team.points}</TableCell>
-                            <TableCell align="right">{team.members.length}</TableCell>
+                            <TableCell align="right">{isAdmin&& team.members.length}</TableCell>
                             {isDelete&&(
                                 <TableCell align="right">
                                     <Button variant="contained" color="secondary" onClick={() => handleRemove(team.id)}>

@@ -14,7 +14,7 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import SetWinnerModal from "./modals/SetWinnerModal";
+import SetWinnerModal from "../modals/SetWinnerModal";
 
 const ProgramDetails = () => {
   const { id } = useParams();
@@ -87,10 +87,10 @@ const ProgramDetails = () => {
               <Typography variant="h6">Participants</Typography>
               <List>
                 {data.program.participants.map((participant, index) => (
-                  <ListItem key={participant.id ?? index}>
+                  <ListItem key={participant?.id ?? index}>
                     <ListItemText
-                      primary={participant.name} 
-                      secondary={`ID: ${participant.id}`}
+                      primary={participant?.name} 
+                      secondary={`ID: ${participant?.id}`}
                     />
                   </ListItem>
                 ))}

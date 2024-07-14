@@ -8,8 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Alert from '@mui/material/Alert';
-import { useAddProgramToParticipantMutation } from '../../../slices/participantsApiSlice'; // Update with your actual slice import
-import { useGetProgramsQuery } from '../../../slices/programsApiSlice'; // Update with your actual slice import
+import { useAddProgramToParticipantMutation } from '../../slices/participantsApiSlice';
+import { useGetProgramsQuery } from '../../slices/programsApiSlice';
 
 const style = {
   position: 'absolute',
@@ -25,14 +25,24 @@ const style = {
 
 const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
   const [programId, setProgramId] = useState('');
+  const [errors, setErrors] = useState({});
   const [mutate, { isError, error }] = useAddProgramToParticipantMutation();
-  const { data, isLoading, isError: isError2, error: programsError } = useGetProgramsQuery();
+  const { data, isLoading, isError: isProgramsError, error: programsError } = useGetProgramsQuery();
+
+  const validate = () => {
+    const newErrors = {};
+    if (!programId) newErrors.programId = 'Program selection is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const onAddProgram = async () => {
+    if (!validate()) return;
     try {
       await mutate({ id: participantId, programId });
       setProgramId('');
-      handleClose(); 
+      setErrors({});
+      handleClose();
     } catch (error) {
       console.error('Error adding program:', error);
     }
@@ -54,7 +64,7 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
             {error.data.message}
           </Alert>
         )}
-        <FormControl fullWidth required margin="normal">
+        <FormControl fullWidth required margin="normal" error={!!errors.programId}>
           <InputLabel id="program-label">Program Name</InputLabel>
           <Select
             labelId="program-label"
@@ -65,7 +75,7 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
           >
             {isLoading ? (
               <MenuItem disabled>Loading programs...</MenuItem>
-            ) : programsError ? (
+            ) : isProgramsError ? (
               <MenuItem disabled>Error loading programs</MenuItem>
             ) : (
               data.programs.map((program) => (
@@ -75,6 +85,11 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
               ))
             )}
           </Select>
+          {errors.programId && (
+            <Typography color="error" variant="caption">
+              {errors.programId}
+            </Typography>
+          )}
         </FormControl>
         <Button
           variant="contained"

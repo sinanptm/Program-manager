@@ -8,8 +8,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { useAddParticipantMutation } from '../../../slices/participantsApiSlice'; 
-import { useGetTeamsQuery } from '../../../slices/teamsApiSlice'; 
+import { useAddParticipantMutation } from '../../slices/participantsApiSlice';
+import { useGetTeamsQuery } from '../../slices/teamsApiSlice';
 
 const style = {
   position: 'absolute',
@@ -30,15 +30,27 @@ const AddParticipantModal = ({ open, handleClose }) => {
   const [participantName, setParticipantName] = useState('');
   const [teamId, setTeamId] = useState('');
   const [category, setCategory] = useState('');
+  const [errors, setErrors] = useState({});
 
-  const [mutate] = useAddParticipantMutation(); 
+  const [mutate] = useAddParticipantMutation();
+
+  const validate = () => {
+    const newErrors = {};
+    if (!participantName) newErrors.participantName = 'Participant name is required';
+    if (!teamId) newErrors.teamId = 'Team selection is required';
+    if (!category) newErrors.category = 'Category selection is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const onAddParticipant = async () => {
+    if (!validate()) return;
     try {
       await mutate({ name: participantName, team: teamId, category });
       setParticipantName('');
       setTeamId('');
       setCategory('');
+      setErrors({});
       handleClose();
     } catch (error) {
       console.error('Error adding participant:', error);
@@ -66,8 +78,10 @@ const AddParticipantModal = ({ open, handleClose }) => {
           autoFocus
           value={participantName}
           onChange={(e) => setParticipantName(e.target.value)}
+          error={!!errors.participantName}
+          helperText={errors.participantName}
         />
-        <FormControl fullWidth required margin="normal">
+        <FormControl fullWidth required margin="normal" error={!!errors.teamId}>
           <InputLabel id="team-label">Team</InputLabel>
           <Select
             labelId="team-label"
@@ -88,8 +102,13 @@ const AddParticipantModal = ({ open, handleClose }) => {
               ))
             )}
           </Select>
+          {errors.teamId && (
+            <Typography color="error" variant="caption">
+              {errors.teamId}
+            </Typography>
+          )}
         </FormControl>
-        <FormControl fullWidth required margin="normal">
+        <FormControl fullWidth required margin="normal" error={!!errors.category}>
           <InputLabel id="category-label">Category</InputLabel>
           <Select
             labelId="category-label"
@@ -104,6 +123,11 @@ const AddParticipantModal = ({ open, handleClose }) => {
               </MenuItem>
             ))}
           </Select>
+          {errors.category && (
+            <Typography color="error" variant="caption">
+              {errors.category}
+            </Typography>
+          )}
         </FormControl>
         <Button
           variant="contained"

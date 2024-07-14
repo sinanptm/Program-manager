@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useAddTeamMutation } from '../../../slices/teamsApiSlice';
+import { useAddTeamMutation } from '../../slices/teamsApiSlice';
 
 const style = {
   position: 'absolute',
@@ -20,12 +20,22 @@ const style = {
 
 const AddTeamModal = ({ open, handleClose }) => {
   const [teamName, setTeamName] = useState('');
-  const [ mutate ] = useAddTeamMutation(); 
+  const [errors, setErrors] = useState({});
+  const [mutate] = useAddTeamMutation();
+
+  const validate = () => {
+    const newErrors = {};
+    if (!teamName) newErrors.teamName = 'Team name is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const onAddTeam = async () => {
+    if (!validate()) return;
     try {
-      await mutate({ name: teamName }); 
+      await mutate({ name: teamName });
       setTeamName('');
+      setErrors({});
       handleClose();
     } catch (error) {
       console.error('Error adding team:', error);
@@ -53,6 +63,8 @@ const AddTeamModal = ({ open, handleClose }) => {
           autoFocus
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
+          error={!!errors.teamName}
+          helperText={errors.teamName}
         />
         <Button
           variant="contained"

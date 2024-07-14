@@ -4,8 +4,8 @@ import { useGetParticipantsQuery, useDeleteParticipantMutation } from "../../sli
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { Alert, Button } from "@mui/material";
-import AddParticipantModal from "./modals/AddParticipantModal";
-import AddProgramToParticipantModal from "./modals/AddProgramToParticipantModal";
+import AddParticipantModal from "../modals/AddParticipantModal";
+import AddProgramToParticipantModal from "../modals/AddProgramToParticipantModal";
 
 const EditParticipants = () => {
   const { data, error, isLoading } = useGetParticipantsQuery();

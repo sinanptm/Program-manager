@@ -7,7 +7,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { useSetWinnersMutation } from "../../../slices/programsApiSlice";
+import { useSetWinnersMutation } from "../../slices/programsApiSlice";
 
 const style = {
   position: "absolute",
