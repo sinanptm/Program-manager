@@ -10,13 +10,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = [
   { name: 'Teams', link: '/teams' },
   { name: 'Programs', link: '/programs' },
   { name: 'Participants', link: '/participants' },
-  { name: 'Admin', link: '/admin' },
 ];
 
 function ResponsiveAppBar() {
@@ -34,7 +32,6 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -50,7 +47,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            SSF
+            Sahityotsav
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -89,7 +86,6 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -106,7 +102,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            SSF
+            Sahityotsav
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

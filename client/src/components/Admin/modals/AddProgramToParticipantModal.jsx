@@ -32,7 +32,7 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
     try {
       await mutate({ id: participantId, programId });
       setProgramId('');
-      handleClose(); // Close modal only on successful addition
+      handleClose(); 
     } catch (error) {
       console.error('Error adding program:', error);
     }

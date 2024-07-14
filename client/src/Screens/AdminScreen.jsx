@@ -1,12 +1,16 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "../slices/adminSlice";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "../components/Admin/Login";
-import EditTeams from "../components/Admin/EditTeams";
-import EditParticipants from "../components/Admin/EditParticipants";
-import EditPrograms from "../components/Admin/EditPrograms";
 import AdminOutlet from "../components/AdminOutlet";
+import LoadingFallback from '../components/LoadingFallback'
+
+// Lazy-loaded components
+const EditTeams = lazy(() => import("../components/Admin/EditTeams"));
+const EditParticipants = lazy(() => import("../components/Admin/EditParticipants"));
+const EditPrograms = lazy(() => import("../components/Admin/EditPrograms"));
+const ProgramDetails = lazy(() => import("../components/Admin/ProgramDetails"));
 
 const Admin = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -17,15 +21,18 @@ const Admin = () => {
 
   return (
     <div>
-      <Routes>
-        <Route path="/" element={<AdminOutlet />}>
-          <Route path="" element={<EditParticipants />} />
-          <Route path="teams" element={<EditTeams />} />
-          <Route path="participants" element={<EditParticipants />} />
-          <Route path="programs" element={<EditPrograms />} />
-          <Route path="login" element={<Navigate to="/admin/edit/teams" />} />
-        </Route>
-      </Routes>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          <Route path="/" element={<AdminOutlet />}>
+            <Route index element={<Navigate to="participants" />} />
+            <Route path="participants" element={<EditParticipants />} />
+            <Route path="teams" element={<EditTeams />} />
+            <Route path="programs" element={<EditPrograms />} />
+            <Route path="program-details/:id" element={<ProgramDetails />} />
+            <Route path="login" element={<Navigate to="/admin/participants" />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </div>
   );
 };

@@ -2,12 +2,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-import AddTeamModal from '../modals/AddTeamModal';
+import AddTeamModal from './modals/AddTeamModal';
 import { useGetTeamsQuery, useDeleteTeamMutation } from '../../slices/teamsApiSlice';
 import { useState } from 'react';
 import TeamList from '../lists/TeamList'
 
-const TeamsList = () => {
+const EditTeam = () => {
   const { data, error, isLoading } = useGetTeamsQuery();
   const teams = data?.teams;
   const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ const TeamsList = () => {
   return (
     <>
       <Typography variant="h4" align="center" gutterBottom>
-        Team List
+        Teams
       </Typography>
       <Button variant="contained" color="primary" onClick={handleOpen} style={{ marginBottom: '16px' }}>
         Add Team
@@ -41,4 +41,4 @@ const TeamsList = () => {
   );
 };
 
-export default TeamsList;
+export default EditTeam;

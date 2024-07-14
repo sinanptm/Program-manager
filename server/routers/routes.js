@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getTeams, addTeam, deleteTeam } from '../controllers/teamController.js';
-import { getPrograms, addProgram, updateProgram, deleteProgram, setWinners  } from '../controllers/programController.js';
+import { getPrograms, addProgram, updateProgram, deleteProgram, setWinners, getProgram } from '../controllers/programController.js';
 import { getParticipants, addParticipant, updateParticipant, deleteParticipant, addProgramToParticipant } from '../controllers/participantController.js';
 
 export const router = Router();
@@ -12,6 +12,7 @@ router.delete('/teams/:id', deleteTeam);    // DELETE /api/teams/:id
 
 // Program routes
 router.get('/programs', getPrograms);             // GET /api/programs
+router.get('/programs/:id', getProgram);             // GET /api/programs
 router.post('/programs', addProgram);             // POST /api/programs
 router.put('/programs/set-winner', setWinners)    // PUT /api/programs
 router.put('/programs/:id', updateProgram);       // PUT /api/programs/:id

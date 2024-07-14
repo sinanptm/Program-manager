@@ -6,34 +6,34 @@ import { transformId } from '../utils/transformId.js';
 
 export const getParticipants = asyncHandler(async (req, res) => {
     let participants = await Participant.find();
-
     participants = transformId(participants);
-
+  
     const participantsWithDetails = await Promise.all(participants.map(async (participant) => {
-        const { team, programs, ...rest } = participant;
-
-        const teamDoc = await Team.findById(team, { _id: 0, name: 1 });
-        const teamName = teamDoc ? teamDoc.name : null;
-
-        const programDetails = await Promise.all(programs.map(async (programObj) => {
-            const programId = programObj._id;
-            const programDoc = await Program.findById(programId, { _id: 0, name: 1 });
-            return {
-                id: programId,
-                name: programDoc ? programDoc.name : null
-            };
-        }));
-
+      const { team, programs, ...rest } = participant;
+  
+      const teamDoc = await Team.findById(team, { _id: 0, name: 1 });
+      const teamName = teamDoc?.name ?? null;
+  
+      const programDetails = await Promise.all(programs.map(async (programObj) => {
+        const programId = programObj.program;
+        const programDoc = await Program.findById(programId, { _id: 1, name: 1 }); 
+  
         return {
-            team,
-            programs: programDetails,
-            ...rest,
-            teamName
+          id: programDoc?._id ?? programId, 
+          name: programDoc?.name ?? 'Unknown Program',
         };
+      }));
+  
+      return {
+        team,
+        programs: programDetails,
+        ...rest,
+        teamName,
+      };
     }));
-
+  
     res.status(200).json({ participants: participantsWithDetails });
-});
+  });
 
 export const addParticipant = asyncHandler(async (req, res) => {
     const { name, team, category } = req.body;

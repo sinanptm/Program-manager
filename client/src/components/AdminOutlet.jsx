@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
 const AdminOutlet = () => {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState('participants');
+  const location = useLocation();
+  const [activeSection, setActiveSection] = useState('');
+
+  useEffect(() => {
+    const path = location.pathname.split('/').pop();
+    if(location.pathname.includes('program-details')){
+      setActiveSection('programs')
+    }else{
+      setActiveSection(path || 'participants');
+    }
+  }, [location]);
 
   const handleNavigation = (section) => {
     setActiveSection(section);
@@ -13,9 +23,9 @@ const AdminOutlet = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-around mb-2"> 
+      <div className="flex justify-around mb-2">
         <Button
-          size="small" 
+          size="small"
           variant={activeSection === 'participants' ? 'contained' : 'outlined'}
           color="primary"
           onClick={() => handleNavigation('participants')}
@@ -31,7 +41,7 @@ const AdminOutlet = () => {
           Teams
         </Button>
         <Button
-          size="small" 
+          size="small"
           variant={activeSection === 'programs' ? 'contained' : 'outlined'}
           color="primary"
           onClick={() => handleNavigation('programs')}
