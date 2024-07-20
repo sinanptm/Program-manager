@@ -1,4 +1,5 @@
 import express, { urlencoded, json } from 'express'
+import cookieParser from 'cookie-parser';
 import { connectDB } from './config/mongo.js';
 import { router } from './routers/routes.js';
 import { errorHandler } from './middleware/errorHandler.js'
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use('/api', router);
 

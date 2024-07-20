@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Check local storage for initial authentication state
 const initialState = {
   auth: localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null
 };

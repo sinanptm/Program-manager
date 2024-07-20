@@ -19,7 +19,7 @@ export const programsApiSlice = createApi({
                 method: 'POST',
                 body: program,
             }),
-            invalidatesTags: ['Program'],  // Invalidate cache when a new program is added
+            invalidatesTags: ['Program'],  
         }),
         updateProgram: builder.mutation({
             query: ({ id, ...program }) => ({
@@ -27,14 +27,14 @@ export const programsApiSlice = createApi({
                 method: 'PUT',
                 body: program,
             }),
-            invalidatesTags: ['Program'],  // Invalidate cache when a program is updated
+            invalidatesTags: ['Program'], 
         }),
         deleteProgram: builder.mutation({
             query: (id) => ({
                 url: `/programs/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Program'],  // Invalidate cache when a program is deleted
+            invalidatesTags: ['Program'],  
         }),
         setWinners: builder.mutation({
             query: (winners) => ({
@@ -42,7 +42,7 @@ export const programsApiSlice = createApi({
                 method: 'PUT',
                 body: winners,
             }),
-            invalidatesTags: ['Program'],  // Invalidate cache when winners are set
+            invalidatesTags: ['Program'], 
         }),
     }),
 });
