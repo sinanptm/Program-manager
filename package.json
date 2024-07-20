@@ -5,8 +5,8 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "nodemon backend/server.js",
-    "server": "nodemon backend/server.js",
+    "start": "nodemon server/server.js",
+    "server": "nodemon server/server.js",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
