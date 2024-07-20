@@ -1,6 +1,5 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "../slices/adminSlice";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "../components/Admin/Login";
 import AdminOutlet from "../components/AdminOutlet";
@@ -13,9 +12,10 @@ const EditPrograms = lazy(() => import("../components/Admin/EditPrograms"));
 const ProgramDetails = lazy(() => import("../components/Admin/ProgramDetails"));
 
 const Admin = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const auth = useSelector(state=>state.auth);
 
-  if (!isAuthenticated) {
+  
+  if (!auth.auth) {
     return <Login />;
   }
 

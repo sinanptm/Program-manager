@@ -1,7 +1,6 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/Navbar";
-import Container from "@mui/material/Container"; // Import Container from Material-UI
+import Container from "@mui/material/Container"; 
 
 const App = () => {
   return (

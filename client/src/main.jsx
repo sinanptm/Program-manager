@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import { Suspense, StrictMode, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { store } from "./app/store.js";
 import { Provider } from "react-redux";
@@ -7,13 +7,13 @@ import './index.css';
 import App from "./App.jsx";
 import LoadingFallback from "./components/LoadingFallback"; 
 
-const TeamsList = React.lazy(() => import('./Screens/TeamsScreen.jsx'));
-const ProgramsList = React.lazy(() => import('./Screens/ProgramScreen.jsx'));
-const ParticipantsList = React.lazy(() => import('./Screens/ParticipantScreen.jsx'));
-const Admin = React.lazy(() => import("./Screens/AdminScreen.jsx"));
+const TeamsList = lazy(() => import('./Screens/TeamsScreen.jsx'));
+const ProgramsList = lazy(() => import('./Screens/ProgramScreen.jsx'));
+const ParticipantsList = lazy(() => import('./Screens/ParticipantScreen.jsx'));
+const Admin = lazy(() => import("./Screens/AdminScreen.jsx"));
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <StrictMode>
     <Provider store={store}>
       <Router>
         <Routes>
@@ -27,5 +27,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </Routes>
       </Router>
     </Provider>
-  </React.StrictMode>
+  </StrictMode>
 );

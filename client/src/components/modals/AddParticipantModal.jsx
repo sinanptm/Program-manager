@@ -1,44 +1,47 @@
-import React, { useState } from 'react';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import { useAddParticipantMutation } from '../../slices/participantsApiSlice';
-import { useGetTeamsQuery } from '../../slices/teamsApiSlice';
+import { useState } from "react";
+import {
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
+import { useAddParticipantMutation } from "../../slices/participantsApiSlice";
+import { useGetTeamsQuery } from "../../slices/teamsApiSlice";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
-const categories = ['lp', 'up', 'hs', 'hss', 'junior'];
+const categories = ["lp", "up", "hs", "hss", "junior"];
 
 const AddParticipantModal = ({ open, handleClose }) => {
   const { data, isLoading, isError } = useGetTeamsQuery();
-  const [participantName, setParticipantName] = useState('');
-  const [teamId, setTeamId] = useState('');
-  const [category, setCategory] = useState('');
+  const [participantName, setParticipantName] = useState("");
+  const [teamId, setTeamId] = useState("");
+  const [category, setCategory] = useState("");
   const [errors, setErrors] = useState({});
 
   const [mutate] = useAddParticipantMutation();
 
   const validate = () => {
     const newErrors = {};
-    if (!participantName) newErrors.participantName = 'Participant name is required';
-    if (!teamId) newErrors.teamId = 'Team selection is required';
-    if (!category) newErrors.category = 'Category selection is required';
+    if (!participantName)
+      newErrors.participantName = "Participant name is required";
+    if (!teamId) newErrors.teamId = "Team selection is required";
+    if (!category) newErrors.category = "Category selection is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -47,13 +50,13 @@ const AddParticipantModal = ({ open, handleClose }) => {
     if (!validate()) return;
     try {
       await mutate({ name: participantName, team: teamId, category });
-      setParticipantName('');
-      setTeamId('');
-      setCategory('');
+      setParticipantName("");
+      setTeamId("");
+      setCategory("");
       setErrors({});
       handleClose();
     } catch (error) {
-      console.error('Error adding participant:', error);
+      console.error("Error adding participant:", error);
     }
   };
 
@@ -65,7 +68,11 @@ const AddParticipantModal = ({ open, handleClose }) => {
       aria-describedby="add-participant-modal-description"
     >
       <Box sx={style}>
-        <Typography id="add-participant-modal-title" variant="h6" component="h2">
+        <Typography
+          id="add-participant-modal-title"
+          variant="h6"
+          component="h2"
+        >
           Add New Participant
         </Typography>
         <TextField
@@ -108,7 +115,12 @@ const AddParticipantModal = ({ open, handleClose }) => {
             </Typography>
           )}
         </FormControl>
-        <FormControl fullWidth required margin="normal" error={!!errors.category}>
+        <FormControl
+          fullWidth
+          required
+          margin="normal"
+          error={!!errors.category}
+        >
           <InputLabel id="category-label">Category</InputLabel>
           <Select
             labelId="category-label"
@@ -133,7 +145,7 @@ const AddParticipantModal = ({ open, handleClose }) => {
           variant="contained"
           color="primary"
           onClick={onAddParticipant}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: "16px" }}
         >
           Add Participant
         </Button>

@@ -6,7 +6,7 @@ export const programsApiSlice = createApi({
     tagTypes: ['Program'],
     endpoints: (builder) => ({
         getPrograms: builder.query({
-            query: () => '/programs',
+            query: ({limit=0,page=0}={}) => `/programs?page=${page}&limit=${limit}`,
             providesTags: ['Program'], 
         }),
         getProgram:builder.query({

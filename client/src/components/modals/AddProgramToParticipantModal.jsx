@@ -1,37 +1,43 @@
-import React, { useState } from 'react';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Alert from '@mui/material/Alert';
-import { useAddProgramToParticipantMutation } from '../../slices/participantsApiSlice';
-import { useGetProgramsQuery } from '../../slices/programsApiSlice';
+import { useState } from "react";
+import {
+  Modal,
+  Box,
+  Typography,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Alert,
+} from "@mui/material";
+import { useAddProgramToParticipantMutation } from "../../slices/participantsApiSlice";
+import { useGetProgramsQuery } from "../../slices/programsApiSlice";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
 const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
-  const [programId, setProgramId] = useState('');
+  const [programId, setProgramId] = useState("");
   const [errors, setErrors] = useState({});
   const [mutate, { isError, error }] = useAddProgramToParticipantMutation();
-  const { data, isLoading, isError: isProgramsError, error: programsError } = useGetProgramsQuery();
+  const {
+    data,
+    isLoading,
+    isError: isProgramsError,
+  } = useGetProgramsQuery();
 
   const validate = () => {
     const newErrors = {};
-    if (!programId) newErrors.programId = 'Program selection is required';
+    if (!programId) newErrors.programId = "Program selection is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -40,11 +46,11 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
     if (!validate()) return;
     try {
       await mutate({ id: participantId, programId });
-      setProgramId('');
+      setProgramId("");
       setErrors({});
       handleClose();
     } catch (error) {
-      console.error('Error adding program:', error);
+      console.error("Error adding program:", error);
     }
   };
 
@@ -60,11 +66,16 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
           Add Program to Participant
         </Typography>
         {isError && (
-          <Alert severity="error" style={{ marginBottom: '16px' }}>
+          <Alert severity="error" style={{ marginBottom: "16px" }}>
             {error.data.message}
           </Alert>
         )}
-        <FormControl fullWidth required margin="normal" error={!!errors.programId}>
+        <FormControl
+          fullWidth
+          required
+          margin="normal"
+          error={!!errors.programId}
+        >
           <InputLabel id="program-label">Program Name</InputLabel>
           <Select
             labelId="program-label"
@@ -95,7 +106,7 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
           variant="contained"
           color="primary"
           onClick={onAddProgram}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: "16px" }}
         >
           Add Program
         </Button>

@@ -1,40 +1,42 @@
-import React, { useState } from 'react';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import { useAddProgramMutation } from '../../slices/programsApiSlice';
+import { useState } from "react";
+import {
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
+import { useAddProgramMutation } from "../../slices/programsApiSlice";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
 const AddProgramModal = ({ open, handleClose }) => {
-  const [programName, setProgramName] = useState('');
-  const [category, setCategory] = useState('');
-  const [type, setType] = useState('');
+  const [programName, setProgramName] = useState("");
+  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
   const [errors, setErrors] = useState({});
 
   const [mutate] = useAddProgramMutation();
 
   const validate = () => {
     const newErrors = {};
-    if (!programName) newErrors.programName = 'Program name is required';
-    if (!category) newErrors.category = 'Category selection is required';
-    if (!type) newErrors.type = 'Type selection is required';
+    if (!programName) newErrors.programName = "Program name is required";
+    if (!category) newErrors.category = "Category selection is required";
+    if (!type) newErrors.type = "Type selection is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -43,13 +45,13 @@ const AddProgramModal = ({ open, handleClose }) => {
     if (!validate()) return;
     try {
       await mutate({ name: programName, category, type });
-      setProgramName('');
-      setCategory('');
-      setType('');
+      setProgramName("");
+      setCategory("");
+      setType("");
       setErrors({});
       handleClose();
     } catch (error) {
-      console.error('Error adding program:', error);
+      console.error("Error adding program:", error);
     }
   };
 
@@ -77,7 +79,12 @@ const AddProgramModal = ({ open, handleClose }) => {
           error={!!errors.programName}
           helperText={errors.programName}
         />
-        <FormControl fullWidth margin="normal" required error={!!errors.category}>
+        <FormControl
+          fullWidth
+          margin="normal"
+          required
+          error={!!errors.category}
+        >
           <InputLabel id="category-label">Category</InputLabel>
           <Select
             labelId="category-label"
@@ -121,7 +128,7 @@ const AddProgramModal = ({ open, handleClose }) => {
           variant="contained"
           color="primary"
           onClick={onAddProgram}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: "16px" }}
         >
           Add Program
         </Button>

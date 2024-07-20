@@ -6,8 +6,8 @@ export const teamsApiSlice = createApi({
     tagTypes: ['Team'], 
     endpoints: (builder) => ({
         getTeams: builder.query({
-            query: () => '/teams',
-            providesTags: ['Team'], 
+            query: ({ page = 0, limit = 0 } = {}) => `/teams?page=${page}&limit=${limit}`,
+            providesTags: ['Team'],
         }),
         addTeam: builder.mutation({
             query: (team) => ({
@@ -32,4 +32,3 @@ export const {
     useAddTeamMutation,
     useDeleteTeamMutation,
 } = teamsApiSlice;
-

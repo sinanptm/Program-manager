@@ -6,13 +6,26 @@ import { transformId } from '../utils/transformId.js';
 import { isValidObjectId } from 'mongoose';
 
 export const getPrograms = asyncHandler(async (req, res) => {
-    const programs = await Program.find();
-    res.status(200).json({ programs: transformId(programs) });
+    const page = parseInt(req.query.page, 10) || 0;
+    const limit = parseInt(req.query.limit, 10) || 0;
+    const skip = (page - 1) * limit;
+
+    const [programs, totalPrograms] = await Promise.all([
+        Program.find().skip(skip).limit(limit),
+        Program.countDocuments()
+    ]);
+
+    res.status(200).json({
+        programs: transformId(programs),
+        totalPages: Math.ceil(totalPrograms / limit),
+        currentPage: page
+    });
 });
 
 export const getProgram = asyncHandler(async (req, res) => {
     const { id } = req.params;
     if (!isValidObjectId(id)) return res.status(404).json({ message: "ID is not valid" });
+    const page = parseInt()
 
     let program = await Program.findById(id).lean();
     if (!program) return res.status(404).json({ message: "Program not found" });

@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
+import { useState } from "react";
+import {Modal,Box, Typography, Button, Select, MenuItem, FormControl, InputLabel} from '@mui/material';
 import { useSetWinnersMutation } from "../../slices/programsApiSlice";
 
 const style = {

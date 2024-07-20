@@ -6,7 +6,7 @@ export const participantsApiSlice = createApi({
     tagTypes: ['Participants'],
     endpoints: (builder) => ({
         getParticipants: builder.query({
-            query: () => '/participants',
+            query: ({ page = 1, limit = 12 } = {}) => `/participants?page=${page}&limit=${limit}`,
             providesTags: ['Team', 'Participants'], 
         }),
         addParticipant: builder.mutation({
@@ -43,10 +43,10 @@ export const participantsApiSlice = createApi({
     }),
 });
 
-export const {
-    useGetParticipantsQuery,
-    useAddParticipantMutation,
-    useUpdateParticipantMutation,
-    useDeleteParticipantMutation,
-    useAddProgramToParticipantMutation,
+export const { 
+  useGetParticipantsQuery, 
+  useAddParticipantMutation, 
+  useUpdateParticipantMutation, 
+  useDeleteParticipantMutation, 
+  useAddProgramToParticipantMutation 
 } = participantsApiSlice;

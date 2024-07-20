@@ -5,35 +5,42 @@ import { Program } from '../models/program.js';
 import { transformId } from '../utils/transformId.js';
 
 export const getParticipants = asyncHandler(async (req, res) => {
-    let participants = await Participant.find();
+    const page = parseInt(req.query.page, 10) ?? 1;
+    const limit = parseInt(req.query.limit, 10) ?? 12;
+    const skip = (page - 1) * limit;
+
+    let participants = await Participant.find().skip(skip).limit(limit);
     participants = transformId(participants);
-  
+
     const participantsWithDetails = await Promise.all(participants.map(async (participant) => {
-      const { team, programs, ...rest } = participant;
-  
-      const teamDoc = await Team.findById(team, { _id: 0, name: 1 });
-      const teamName = teamDoc?.name ?? null;
-  
-      const programDetails = await Promise.all(programs.map(async (programObj) => {
-        const programId = programObj.program;
-        const programDoc = await Program.findById(programId, { _id: 1, name: 1 }); 
-  
+        const { team, programs, ...rest } = participant;
+
+        const teamDoc = await Team.findById(team, { _id: 0, name: 1 });
+        const teamName = teamDoc?.name ?? null;
+
+        const programDetails = await Promise.all(programs.map(async (programObj) => {
+            const programId = programObj.program;
+            const programDoc = await Program.findById(programId, { _id: 1, name: 1 });
+
+            return {
+                id: programDoc?._id ?? programId,
+                name: programDoc?.name ?? 'Unknown Program',
+            };
+        }));
+
         return {
-          id: programDoc?._id ?? programId, 
-          name: programDoc?.name ?? 'Unknown Program',
+            team,
+            programs: programDetails,
+            ...rest,
+            teamName,
         };
-      }));
-  
-      return {
-        team,
-        programs: programDetails,
-        ...rest,
-        teamName,
-      };
     }));
-  
-    res.status(200).json({ participants: participantsWithDetails });
-  });
+
+    const totalParticipants = await Participant.countDocuments();
+    const totalPages = Math.ceil(totalParticipants / limit);
+
+    res.status(200).json({ participants: participantsWithDetails, totalPages, currentPage: page });
+});
 
 export const addParticipant = asyncHandler(async (req, res) => {
     const { name, team, category } = req.body;
@@ -80,7 +87,7 @@ export const addProgramToParticipant = asyncHandler(async (req, res) => {
             return res.status(404).json({ message: "Participant or Program not found" });
         }
 
-        const existingProgram = participant.programs.find(item =>  item?.program?.toString() === programId);
+        const existingProgram = participant.programs.find(item => item?.program?.toString() === programId);
         if (existingProgram) {
             return res.status(402).json({ message: 'This program is already registered for the participant' });
         }

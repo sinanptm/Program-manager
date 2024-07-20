@@ -3,8 +3,19 @@ import { Team } from '../models/team.js';
 import { transformId } from '../utils/transformId.js';
 
 export const getTeams = asyncHandler(async (req, res) => {
-    const teams = await Team.find();
-    res.status(200).json({ teams: transformId(teams) });
+    const page = parseInt(req.query.page, 10) ?? 0;
+    const limit = parseInt(req.query.limit, 10) ?? 0;
+    const skip = (page - 1) * limit;
+
+    const totalTeams = await Team.countDocuments();
+    const totalPages = Math.ceil(totalTeams / limit);
+    const teams = await Team.find().skip(skip).limit(limit);
+
+    res.status(200).json({
+        teams: transformId(teams),
+        totalPages,
+        currentPage: page
+    });
 });
 
 export const addTeam = asyncHandler(async (req, res) => {

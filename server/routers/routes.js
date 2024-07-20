@@ -1,9 +1,13 @@
 import { Router } from 'express';
+import { authLogin } from '../controllers/authorization.js'
 import { getTeams, addTeam, deleteTeam } from '../controllers/teamController.js';
 import { getPrograms, addProgram, updateProgram, deleteProgram, setWinners, getProgram } from '../controllers/programController.js';
 import { getParticipants, addParticipant, updateParticipant, deleteParticipant, addProgramToParticipant } from '../controllers/participantController.js';
 
 export const router = Router();
+
+// Authorization Route
+router.post('/login', authLogin);           // POST /api/login
 
 // Team routes
 router.get('/teams', getTeams);             // GET /api/teams
