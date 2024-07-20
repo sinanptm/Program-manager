@@ -10,10 +10,10 @@ const ParticipantScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const limit = 10;
 
-  const { data, error, isLoading } = useGetParticipantsQuery({ page, limit });
-
+  
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-
+  const { data, error, isLoading } = useGetParticipantsQuery({ page, limit, search:debouncedSearchTerm });
+  
   const handleNextPage = () => {
     if (page < data.totalPages) {
       setPage(page + 1);

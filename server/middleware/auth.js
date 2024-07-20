@@ -1,7 +1,6 @@
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 
-
 export const isAuthorized = asyncHandler(async (req, res, next) => {
     const token = req.cookies.token;
     if (token) {

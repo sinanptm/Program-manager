@@ -43,12 +43,7 @@ const ErrorBoundary = ({ children }) => {
         <Typography variant="h6" color="textSecondary" gutterBottom>
           An unexpected error has occurred. Please try again later.
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          component={Link}
-          to="/"
-        >
+        <Button variant="contained" color="primary" component={Link} to="/">
           Go Home
         </Button>
       </Box>

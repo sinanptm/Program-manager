@@ -1,5 +1,14 @@
 import { useState } from "react";
-import {Modal,Box, Typography, Button, Select, MenuItem, FormControl, InputLabel} from '@mui/material';
+import {
+  Modal,
+  Box,
+  Typography,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { useSetWinnersMutation } from "../../slices/programsApiSlice";
 
 const style = {
@@ -14,7 +23,13 @@ const style = {
   p: 4,
 };
 
-const SetWinnerModal = ({ open, handleClose, participants, currentWinners, onSave }) => {
+const SetWinnerModal = ({
+  open,
+  handleClose,
+  participants,
+  currentWinners,
+  onSave,
+}) => {
   const [selectedParticipants, setSelectedParticipants] = useState({
     firstPlace: currentWinners?.firstPlace?.participant?.id || "",
     secondPlace: currentWinners?.secondPlace?.participant?.id || "",
@@ -29,9 +44,18 @@ const SetWinnerModal = ({ open, handleClose, participants, currentWinners, onSav
 
   const handleSave = async () => {
     const winnersData = {
-      firstPlace: { participant: selectedParticipants.firstPlace, points: points.firstPlace },
-      secondPlace: { participant: selectedParticipants.secondPlace, points: points.secondPlace },
-      thirdPlace: { participant: selectedParticipants.thirdPlace, points: points.thirdPlace },
+      firstPlace: {
+        participant: selectedParticipants.firstPlace,
+        points: points.firstPlace,
+      },
+      secondPlace: {
+        participant: selectedParticipants.secondPlace,
+        points: points.secondPlace,
+      },
+      thirdPlace: {
+        participant: selectedParticipants.thirdPlace,
+        points: points.thirdPlace,
+      },
     };
 
     await setWinners(winnersData);
@@ -50,23 +74,30 @@ const SetWinnerModal = ({ open, handleClose, participants, currentWinners, onSav
         <Typography id="set-winner-modal-title" variant="h6" component="h2">
           Set Winners
         </Typography>
-        
+
         {["firstPlace", "secondPlace", "thirdPlace"].map((place) => (
           <div key={place}>
-            <Typography variant="subtitle1">{`${place.charAt(0).toUpperCase()}${place.slice(1)}:`}</Typography>
+            <Typography variant="subtitle1">{`${place
+              .charAt(0)
+              .toUpperCase()}${place.slice(1)}:`}</Typography>
             <FormControl fullWidth required margin="normal">
-              <InputLabel id={`${place}-participant-label`}>Participant</InputLabel>
+              <InputLabel id={`${place}-participant-label`}>
+                Participant
+              </InputLabel>
               <Select
                 labelId={`${place}-participant-label`}
                 id={`${place}-participant`}
                 value={selectedParticipants[place]}
                 onChange={(e) =>
-                  setSelectedParticipants((prev) => ({ ...prev, [place]: e.target.value }))
+                  setSelectedParticipants((prev) => ({
+                    ...prev,
+                    [place]: e.target.value,
+                  }))
                 }
                 label="Participant"
               >
-                {participants.map((participant,i) => (
-                  <MenuItem key={participant?.id??i} value={participant?.id}>
+                {participants.map((participant, i) => (
+                  <MenuItem key={participant?.id ?? i} value={participant?.id}>
                     {participant?.name}
                   </MenuItem>
                 ))}

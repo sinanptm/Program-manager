@@ -1,11 +1,13 @@
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
+import {
+  TableContainer,
+  Table,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+  Paper,
+  Button
+} from "@mui/material";
 
 const ParticipantsList = ({  participants,  actions,  handleRemove,  handleAddProgram }) => {
   return (
@@ -18,7 +20,6 @@ const ParticipantsList = ({  participants,  actions,  handleRemove,  handleAddPr
               <TableCell>Name</TableCell>
               <TableCell>Team</TableCell>
               <TableCell align="left">Points</TableCell>
-              {/* <TableCell>Programs</TableCell> */}
               <TableCell>Category</TableCell>
               {actions && <TableCell align="right">Actions</TableCell>}
             </TableRow>
@@ -30,14 +31,6 @@ const ParticipantsList = ({  participants,  actions,  handleRemove,  handleAddPr
                 <TableCell>{participant.name}</TableCell>
                 <TableCell>{participant.teamName}</TableCell>
                 <TableCell align="left">{participant.points}</TableCell>
-                {/* <TableCell>
-                  {participant.programs.map((program, idx) => (
-                    <span key={program.id}>
-                      {program.name}
-                      {idx < participant.programs.length - 1 && ", "}
-                    </span>
-                  ))}
-                </TableCell> */}
                 <TableCell>{participant.category}</TableCell>
                 {actions && (
                   <TableCell align="right">

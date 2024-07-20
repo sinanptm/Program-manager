@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-// Participant Schema
+
 const participantSchema = new Schema({
     name: {
         type: String,
@@ -22,9 +22,9 @@ const participantSchema = new Schema({
             },
         },
     ],
-    category:{
-        type:String,
-        enum:['lp','up','hs','hss','junior'],
+    category: {
+        type: String,
+        enum: ['lp', 'up', 'hs', 'hss', 'junior'],
         required: true,
     }
 }, { timestamps: true });

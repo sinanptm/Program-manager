@@ -1,8 +1,14 @@
-import { Typography, CircularProgress, Button, Box, Alert } from "@mui/material";
+import {
+  Typography,
+  CircularProgress,
+  Button,
+  Box,
+  Alert,
+} from "@mui/material";
 import { useState, useMemo, useCallback } from "react";
 import { useGetProgramsQuery } from "../slices/programsApiSlice";
 import ProgramList from "../components/lists/ProgramList";
-import SearchInput from '../components/SearchInput';
+import SearchInput from "../components/SearchInput";
 import useDebounce from "../hooks/useDebounce";
 
 const ProgramScreen = () => {
@@ -33,28 +39,28 @@ const ProgramScreen = () => {
   }, []);
 
   const filteredPrograms = useMemo(() => {
-    return programs
-      .filter(
-        (program) =>
-          debouncedSearchTerm === "" ||
-          program.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-      )
+    return programs.filter(
+      (program) =>
+        debouncedSearchTerm === "" ||
+        program.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    );
   }, [programs, debouncedSearchTerm]);
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
   }
 
   if (error) {
-    return (
-      <Alert severity="error">
-        Error: {error.message}
-      </Alert>
-    );
+    return <Alert severity="error">Error: {error.message}</Alert>;
   }
 
   return (
@@ -97,7 +103,8 @@ const ProgramScreen = () => {
         </Button>
       </Box>
       <br />
-      <br /><br />
+      <br />
+      <br />
     </>
   );
 };

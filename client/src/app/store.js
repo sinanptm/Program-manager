@@ -3,7 +3,7 @@ import { participantsApiSlice } from '../slices/participantsApiSlice';
 import { programsApiSlice } from '../slices/programsApiSlice';
 import { teamsApiSlice } from '../slices/teamsApiSlice';
 import { authApiSlice } from '../slices/authApiSlice'
-import authSlice from '../slices/authSlice'; // Ensure this path is correct
+import authSlice from '../slices/authSlice';
 
 export const store = configureStore({
     reducer: {

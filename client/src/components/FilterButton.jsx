@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Menu, MenuItem, Button } from '@mui/material';
+import { useState } from "react";
+import { Menu, MenuItem, Button } from "@mui/material";
 
 const FilterButton = ({ label, options, selectedValue, onChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -23,8 +23,8 @@ const FilterButton = ({ label, options, selectedValue, onChange }) => {
         variant="outlined"
         onClick={handleClick}
         sx={{
-          textTransform: 'none',
-          minWidth: '120px',
+          textTransform: "none",
+          minWidth: "120px",
         }}
       >
         {label}
@@ -38,7 +38,7 @@ const FilterButton = ({ label, options, selectedValue, onChange }) => {
           paper: {
             sx: {
               maxHeight: 200,
-              width: '200px',
+              width: "200px",
             },
           },
         }}

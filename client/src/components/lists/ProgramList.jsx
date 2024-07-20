@@ -1,12 +1,13 @@
-import React from 'react';
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import Paper from '@mui/material/Paper';
-import { useNavigate } from 'react-router-dom';
+import {
+  TableContainer,
+  Table,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+  Paper,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ProgramList = ({ programs, isAdmin }) => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const ProgramList = ({ programs, isAdmin }) => {
               <TableRow
                 key={program.id || i}
                 onClick={() => handleRowClick(program.id)}
-                style={{ cursor: isAdmin ? 'pointer' : 'default' }}
+                style={{ cursor: isAdmin ? "pointer" : "default" }}
               >
                 <TableCell component="th" scope="row">
                   {i + 1}

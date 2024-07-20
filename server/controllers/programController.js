@@ -208,4 +208,3 @@ export const setWinners = asyncHandler(async (req, res) => {
         ...results,
     });
 });
-

@@ -5,7 +5,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   useGetParticipantsQuery,
   useDeleteParticipantMutation,
@@ -45,21 +45,15 @@ const EditParticipants = () => {
     []
   );
 
-  const handleCategoryChange = useCallback(
-    (value) => {
-      setCategoryFilter(value);
-      setPage(1); 
-    },
-    []
-  );
+  const handleCategoryChange = useCallback((value) => {
+    setCategoryFilter(value);
+    setPage(1);
+  }, []);
 
-  const handleSearchChange = useCallback(
-    (event) => {
-      setSearchTerm(event.target.value);
-      setPage(1); 
-    },
-    []
-  );
+  const handleSearchChange = useCallback((event) => {
+    setSearchTerm(event.target.value);
+    setPage(1);
+  }, []);
 
   const handleRemove = useCallback(
     async (id) => {

@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetProgramQuery, useSetWinnersMutation } from "../../slices/programsApiSlice";
+import {
+  useGetProgramQuery,
+  useSetWinnersMutation,
+} from "../../slices/programsApiSlice";
 import {
   CircularProgress,
   Typography,
@@ -89,7 +92,7 @@ const ProgramDetails = () => {
                 {data.program.participants.map((participant, index) => (
                   <ListItem key={participant?.id ?? index}>
                     <ListItemText
-                      primary={participant?.name} 
+                      primary={participant?.name}
                       secondary={`ID: ${participant?.id}`}
                     />
                   </ListItem>
@@ -140,4 +143,3 @@ const renderWinnerListItem = (place, placeData) => {
 };
 
 export default ProgramDetails;
-

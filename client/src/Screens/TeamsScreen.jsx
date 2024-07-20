@@ -1,8 +1,14 @@
-import { CircularProgress, Typography, Button, Box, Alert } from "@mui/material";
+import {
+  CircularProgress,
+  Typography,
+  Button,
+  Box,
+  Alert,
+} from "@mui/material";
 import TeamList from "../components/lists/TeamList";
 import { useGetTeamsQuery } from "../slices/teamsApiSlice";
 import { useState, useCallback, useMemo } from "react";
-import SearchInput from '../components/SearchInput';
+import SearchInput from "../components/SearchInput";
 import useDebounce from "../hooks/useDebounce";
 
 const TeamScreen = () => {
@@ -38,11 +44,17 @@ const TeamScreen = () => {
     );
   }, [teams, debouncedSearchTerm]);
 
-  if (isLoading) return (
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-      <CircularProgress />
-    </Box>
-  );
+  if (isLoading)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   if (error) return <Alert severity="error">Error: {error.message}</Alert>;
 
@@ -88,7 +100,8 @@ const TeamScreen = () => {
         </Button>
       </Box>
       <br />
-      <br /><br />
+      <br />
+      <br />
     </>
   );
 };

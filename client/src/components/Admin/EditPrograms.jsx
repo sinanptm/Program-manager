@@ -1,5 +1,11 @@
-import { Alert, Button, Typography, CircularProgress, Box } from "@mui/material";
-import { useState, useMemo, useCallback } from "react";
+import {
+  Alert,
+  Button,
+  Typography,
+  CircularProgress,
+  Box,
+} from "@mui/material";
+import { useState, useCallback } from "react";
 import { useGetProgramsQuery } from "../../slices/programsApiSlice";
 import ProgramList from "../lists/ProgramList";
 import AddProgramModal from "../modals/AddProgramModal";
@@ -33,8 +39,14 @@ const EditPrograms = () => {
   const handleClose = useCallback(() => setOpen(false), []);
 
   const handleStatusChange = useCallback((value) => setStatusFilter(value), []);
-  const handleCategoryChange = useCallback((value) => setCategoryFilter(value), []);
-  const handleSearchChange = useCallback((event) => setSearchTerm(event.target.value), []);
+  const handleCategoryChange = useCallback(
+    (value) => setCategoryFilter(value),
+    []
+  );
+  const handleSearchChange = useCallback(
+    (event) => setSearchTerm(event.target.value),
+    []
+  );
 
   const handleNextPage = useCallback(() => {
     if (page < totalPages) setPage(page + 1);
@@ -46,7 +58,14 @@ const EditPrograms = () => {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <CircularProgress />
       </div>
     );
@@ -73,7 +92,14 @@ const EditPrograms = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Programs
       </Typography>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "16px",
+        }}
+      >
         <AddButton onClick={handleOpen} label="Add" />
         <SearchInput
           label="Search"

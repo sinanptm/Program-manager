@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 
-// Team Schema
 const teamSchema = new Schema({
     name: {
         type: String,

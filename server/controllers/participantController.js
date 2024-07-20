@@ -53,7 +53,6 @@ export const getParticipants = asyncHandler(async (req, res) => {
     res.status(200).json({ participants: participantsWithDetails, totalPages, currentPage: page });
 });
 
-
 export const addParticipant = asyncHandler(async (req, res) => {
     const { name, team, category } = req.body;
     const participant = await Participant.create({

@@ -5,7 +5,6 @@ import Login from "../components/Admin/Login";
 import AdminOutlet from "../components/AdminOutlet";
 import LoadingFallback from '../components/LoadingFallback'
 
-// Lazy-loaded components
 const EditTeams = lazy(() => import("../components/Admin/EditTeams"));
 const EditParticipants = lazy(() => import("../components/Admin/EditParticipants"));
 const EditPrograms = lazy(() => import("../components/Admin/EditPrograms"));

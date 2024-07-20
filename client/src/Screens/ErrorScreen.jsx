@@ -1,12 +1,12 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const ErrorScreen = ({isAdmin}) => {
+const ErrorScreen = ({ isAdmin }) => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    if(isAdmin) navigate('/admin/teams')
-    else navigate("/teams"); 
+    if (isAdmin) navigate("/admin/teams");
+    else navigate("/teams");
   };
 
   return (
@@ -25,11 +25,7 @@ const ErrorScreen = ({isAdmin}) => {
       <Typography variant="h6" color="textSecondary" gutterBottom>
         Oops! The page you're looking for doesn't exist.
       </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleGoHome}
-      >
+      <Button variant="contained" color="primary" onClick={handleGoHome}>
         Go Home
       </Button>
     </Box>

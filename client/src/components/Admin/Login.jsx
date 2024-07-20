@@ -15,11 +15,11 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Clear any existing error messages
+    setError(""); 
     try {
       const res = await auth({ email, password }).unwrap();
       dispatch(setCredentials({ token: res.token }));
-      navigate('/admin/')
+      navigate("/admin/");
     } catch (err) {
       console.error("Failed to login: ", err);
       setError("Invalid email or password");
@@ -71,7 +71,11 @@ const Login = () => {
             Login
           </Button>
           {error && (
-            <Typography variant="body2" color="error" style={{ marginTop: "16px" }}>
+            <Typography
+              variant="body2"
+              color="error"
+              style={{ marginTop: "16px" }}
+            >
               {error}
             </Typography>
           )}

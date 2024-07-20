@@ -29,11 +29,7 @@ const AddProgramToParticipantModal = ({ open, handleClose, participantId }) => {
   const [programId, setProgramId] = useState("");
   const [errors, setErrors] = useState({});
   const [mutate, { isError, error }] = useAddProgramToParticipantMutation();
-  const {
-    data,
-    isLoading,
-    isError: isProgramsError,
-  } = useGetProgramsQuery();
+  const { data, isLoading, isError: isProgramsError } = useGetProgramsQuery();
 
   const validate = () => {
     const newErrors = {};

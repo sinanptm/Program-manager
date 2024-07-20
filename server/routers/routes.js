@@ -7,7 +7,7 @@ import { isAuthorized } from '../middleware/auth.js';
 
 export const router = Router();
 
-// Authorization Route
+// Authentication Route
 router.post('/login', authLogin);                         // POST /api/login
 
 // Team routes

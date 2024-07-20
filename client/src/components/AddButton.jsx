@@ -7,14 +7,14 @@ const AddButton = ({ onClick, label }) => {
       color="primary"
       onClick={onClick}
       sx={{
-        textTransform: 'none',
-        padding: '8px 16px',
+        textTransform: "none",
+        padding: "8px 16px",
         fontSize: {
-          xs: '0.75rem', 
-          sm: '0.875rem', 
+          xs: "0.75rem",
+          sm: "0.875rem",
         },
-        '@media (max-width: 600px)': {
-          padding: '6px 12px',
+        "@media (max-width: 600px)": {
+          padding: "6px 12px",
         },
       }}
     >
