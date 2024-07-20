@@ -1,28 +1,26 @@
 import {
   Alert,
-  Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Typography,
   CircularProgress,
-  TextField,
   Box,
+  Button
 } from "@mui/material";
 import { useState, useMemo, useCallback } from "react";
-import ParticipantsList from "../lists/ParticipantsList";
 import {
   useGetParticipantsQuery,
   useDeleteParticipantMutation,
 } from "../../slices/participantsApiSlice";
+import ParticipantsList from "../lists/ParticipantsList";
 import AddParticipantModal from "../modals/AddParticipantModal";
 import AddProgramToParticipantModal from "../modals/AddProgramToParticipantModal";
+import FilterButton from "../FilterButton";
+import SearchInput from "../SearchInput";
 import useDebounce from "../../hooks/useDebounce";
+import AddButton from "../AddButton"; 
 
 const EditParticipants = () => {
   const [page, setPage] = useState(1);
-  const limit = 10; // Number of participants per page
+  const limit = 10;
   const { data, error, isLoading } = useGetParticipantsQuery({ page, limit });
   const [deleteParticipant, { isError, error: deleteError }] =
     useDeleteParticipantMutation();
@@ -35,9 +33,18 @@ const EditParticipants = () => {
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handleCloseAddModal = useCallback(() => setOpenAddModal(false), []);
-  const handleCloseProgramModal = useCallback(() => setOpenProgramModal(false), []);
-  const handleCategoryChange = useCallback((event) => setCategoryFilter(event.target.value), []);
-  const handleSearchChange = useCallback((event) => setSearchTerm(event.target.value), []);
+  const handleCloseProgramModal = useCallback(
+    () => setOpenProgramModal(false),
+    []
+  );
+  const handleCategoryChange = useCallback(
+    (value) => setCategoryFilter(value),
+    []
+  );
+  const handleSearchChange = useCallback(
+    (event) => setSearchTerm(event.target.value),
+    []
+  );
 
   const filteredParticipants = useMemo(() => {
     if (!data?.participants) return [];
@@ -50,18 +57,23 @@ const EditParticipants = () => {
       .filter(
         (participant) =>
           debouncedSearchTerm === "" ||
-          participant.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+          participant.name
+            .toLowerCase()
+            .includes(debouncedSearchTerm.toLowerCase())
       )
       .sort((a, b) => b.points - a.points);
   }, [data, categoryFilter, debouncedSearchTerm]);
 
-  const handleRemove = useCallback(async (id) => {
-    try {
-      await deleteParticipant(id).unwrap();
-    } catch (error) {
-      console.error("Error deleting participant:", error);
-    }
-  }, [deleteParticipant]);
+  const handleRemove = useCallback(
+    async (id) => {
+      try {
+        await deleteParticipant(id).unwrap();
+      } catch (error) {
+        console.error("Error deleting participant:", error);
+      }
+    },
+    [deleteParticipant]
+  );
 
   const handleAddProgram = useCallback((id) => {
     setSelectedParticipantId(id);
@@ -84,11 +96,25 @@ const EditParticipants = () => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
   }
+
+  const categoryOptions = [
+    { label: "All", value: "" },
+    { label: "LP", value: "lp" },
+    { label: "UP", value: "up" },
+    { label: "HS", value: "hs" },
+    { label: "HSS", value: "hss" },
+    { label: "Junior", value: "junior" },
+  ];
 
   return (
     <>
@@ -101,37 +127,19 @@ const EditParticipants = () => {
         justifyContent="space-between"
         marginBottom="16px"
       >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleOpenAddModal}
-        >
-          Add Participant
-        </Button>
-        <TextField
-          variant="outlined"
+        <AddButton onClick={handleOpenAddModal} label="Add" />
+        <SearchInput
           label="Search"
           value={searchTerm}
           onChange={handleSearchChange}
-          style={{ flexGrow: 1, marginLeft: "16px", marginRight: "16px" }}
+          placeholder="Search participants..."
         />
-        <FormControl variant="outlined" style={{ minWidth: 200 }}>
-          <InputLabel>Category</InputLabel>
-          <Select
-            value={categoryFilter}
-            onChange={handleCategoryChange}
-            label="Category"
-          >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
-            <MenuItem value="lp">LP</MenuItem>
-            <MenuItem value="up">UP</MenuItem>
-            <MenuItem value="hs">HS</MenuItem>
-            <MenuItem value="hss">HSS</MenuItem>
-            <MenuItem value="junior">Junior</MenuItem>
-          </Select>
-        </FormControl>
+        <FilterButton
+          label="Category"
+          options={categoryOptions}
+          selectedValue={categoryFilter}
+          onChange={handleCategoryChange}
+        />
       </Box>
       {(isError || error) && (
         <Alert severity="error">
@@ -165,7 +173,10 @@ const EditParticipants = () => {
           Next
         </Button>
       </Box>
-      <AddParticipantModal open={openAddModal} handleClose={handleCloseAddModal} />
+      <AddParticipantModal
+        open={openAddModal}
+        handleClose={handleCloseAddModal}
+      />
       <AddProgramToParticipantModal
         open={openProgramModal}
         handleClose={handleCloseProgramModal}

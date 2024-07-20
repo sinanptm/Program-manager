@@ -10,6 +10,8 @@ const EditTeams = lazy(() => import("../components/Admin/EditTeams"));
 const EditParticipants = lazy(() => import("../components/Admin/EditParticipants"));
 const EditPrograms = lazy(() => import("../components/Admin/EditPrograms"));
 const ProgramDetails = lazy(() => import("../components/Admin/ProgramDetails"));
+const ErrorScreen = lazy(()=> import("../screens/ErrorScreen"));
+
 
 const Admin = () => {
   const auth = useSelector(state=>state.auth);
@@ -30,6 +32,7 @@ const Admin = () => {
             <Route path="programs" element={<EditPrograms />} />
             <Route path="program-details/:id" element={<ProgramDetails />} />
             <Route path="login" element={<Navigate to="/admin/participants" />} />
+            <Route path="*" element={<ErrorScreen isAdmin={true} />} />
           </Route>
         </Routes>
       </Suspense>

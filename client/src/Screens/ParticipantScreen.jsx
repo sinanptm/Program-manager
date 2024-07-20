@@ -1,12 +1,18 @@
-import { useState } from "react";
-import { CircularProgress, Typography, Button, Box } from "@mui/material";
+import { useState, useMemo, useCallback } from "react";
+import { CircularProgress, Typography, Button, Box, Alert } from "@mui/material";
 import { useGetParticipantsQuery } from "../slices/participantsApiSlice";
 import ParticipantsList from "../components/lists/ParticipantsList";
+import SearchInput from '../components/SearchInput';
+import useDebounce from "../hooks/useDebounce";
 
 const ParticipantScreen = () => {
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const limit = 10;
+
   const { data, error, isLoading } = useGetParticipantsQuery({ page, limit });
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handleNextPage = () => {
     if (page < data.totalPages) {
@@ -20,19 +26,45 @@ const ParticipantScreen = () => {
     }
   };
 
-  if (isLoading) return <CircularProgress />;
-  if (error) return <div>Error: {error.message}</div>;
+  const handleSearchChange = useCallback((event) => {
+    setSearchTerm(event.target.value);
+  }, []);
 
-  const participants = [...data?.participants].sort(
-    (a, b) => b.points - a.points
-  );
+  const filteredParticipants = useMemo(() => {
+    if (!data?.participants) return [];
+
+    return data.participants
+      .filter(
+        (participant) =>
+          debouncedSearchTerm === "" ||
+          participant.name
+            .toLowerCase()
+            .includes(debouncedSearchTerm.toLowerCase())
+      )
+      .sort((a, b) => b.points - a.points);
+  }, [data, debouncedSearchTerm]);
+
+  if (isLoading) return <CircularProgress />;
+  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
 
   return (
     <>
       <Typography variant="h4" align="center" gutterBottom>
         Participants
       </Typography>
-      <ParticipantsList participants={participants} />
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        marginBottom="16px"
+      >
+        <SearchInput
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder="Search Participants..."
+        />
+      </Box>
+      <ParticipantsList participants={filteredParticipants} />
       <Box display="flex" justifyContent="center" mt={2}>
         <Button
           variant="contained"
@@ -43,7 +75,7 @@ const ParticipantScreen = () => {
           Previous
         </Button>
         <Typography variant="body1" mx={2}>
-          Page {data.currentPage} of {data.totalPages}
+          Page {page} of {data.totalPages}
         </Typography>
         <Button
           variant="contained"
@@ -54,8 +86,6 @@ const ParticipantScreen = () => {
           Next
         </Button>
       </Box>
-      <br />
-      <br /><br />
     </>
   );
 };

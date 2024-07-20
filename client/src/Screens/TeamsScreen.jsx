@@ -1,15 +1,20 @@
-import { CircularProgress, Typography, Button, Box } from "@mui/material";
+import { CircularProgress, Typography, Button, Box, Alert } from "@mui/material";
 import TeamList from "../components/lists/TeamList";
 import { useGetTeamsQuery } from "../slices/teamsApiSlice";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
+import SearchInput from '../components/SearchInput';
+import useDebounce from "../hooks/useDebounce";
 
 const TeamScreen = () => {
   const [page, setPage] = useState(1);
-  const limit = 10; 
+  const [searchTerm, setSearchTerm] = useState("");
+  const limit = 10;
 
   const { data, error, isLoading } = useGetTeamsQuery({ page, limit });
   const teams = data?.teams || [];
   const totalPages = data?.totalPages || 1;
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handleNextPage = useCallback(() => {
     if (page < totalPages) {
@@ -23,17 +28,43 @@ const TeamScreen = () => {
     }
   }, [page]);
 
-  if (isLoading) return <CircularProgress />;
+  const handleSearchChange = useCallback((event) => {
+    setSearchTerm(event.target.value);
+  }, []);
 
-  if (error) return <div>Error: {error.message}</div>;
+  const filteredTeams = useMemo(() => {
+    return teams.filter((team) =>
+      team.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    );
+  }, [teams, debouncedSearchTerm]);
 
-  const sortedTeams = [...teams].sort((a, b) => b.points - a.points);
+  if (isLoading) return (
+    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <CircularProgress />
+    </Box>
+  );
+
+  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
+
+  const sortedTeams = [...filteredTeams].sort((a, b) => b.points - a.points);
 
   return (
     <>
       <Typography variant="h4" align="center" gutterBottom>
         Teams
       </Typography>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        marginBottom="16px"
+      >
+        <SearchInput
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder="Search teams..."
+        />
+      </Box>
       <TeamList teams={sortedTeams} />
       <Box display="flex" justifyContent="center" mt={2}>
         <Button

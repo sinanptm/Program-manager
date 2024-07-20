@@ -1,18 +1,11 @@
-import {
-  CircularProgress,
-  Typography,
-  Button,
-  Alert,
-  TextField,
-} from "@mui/material";
-import AddTeamModal from "../modals/AddTeamModal";
-import {
-  useGetTeamsQuery,
-  useDeleteTeamMutation,
-} from "../../slices/teamsApiSlice";
+import { CircularProgress, Typography, Alert } from "@mui/material";
 import { useState, useMemo, useCallback } from "react";
+import { useGetTeamsQuery, useDeleteTeamMutation } from "../../slices/teamsApiSlice";
 import TeamList from "../lists/TeamList";
 import useDebounce from "../../hooks/useDebounce";
+import SearchInput from "../SearchInput";
+import AddButton from "../AddButton"; 
+import AddTeamModal from "../modals/AddTeamModal";
 
 const EditTeam = () => {
   const { data, error, isLoading } = useGetTeamsQuery();
@@ -24,42 +17,26 @@ const EditTeam = () => {
 
   const handleOpen = useCallback(() => setOpen(true), []);
   const handleClose = useCallback(() => setOpen(false), []);
-  const handleSearchChange = useCallback(
-    (event) => setSearchTerm(event.target.value),
-    []
-  );
+  const handleSearchChange = useCallback((event) => setSearchTerm(event.target.value), []);
 
-  const handleRemoveTeam = useCallback(
-    async (teamId) => {
-      try {
-        await deleteTeam(teamId);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    [deleteTeam]
-  );
+  const handleRemoveTeam = useCallback(async (teamId) => {
+    try {
+      await deleteTeam(teamId);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [deleteTeam]);
 
   const filteredTeams = useMemo(() => {
     if (!teams) return [];
-
     return teams
-      .filter((team) =>
-        team.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-      )
+      .filter((team) => team.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
       .sort((a, b) => b.points - a.points);
   }, [teams, debouncedSearchTerm]);
 
   if (isLoading)
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
         <CircularProgress />
       </div>
     );
@@ -69,23 +46,13 @@ const EditTeam = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Teams
       </Typography>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "16px",
-        }}
-      >
-        <Button variant="contained" color="primary" onClick={handleOpen}>
-          Add Team
-        </Button>
-        <TextField
-          variant="outlined"
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", marginBottom: "16px" }}>
+        <AddButton onClick={handleOpen} label="Add" /> 
+        <SearchInput
           label="Search"
           value={searchTerm}
           onChange={handleSearchChange}
-          style={{ flexGrow: 1, marginLeft: "16px", marginRight: "16px" }}
+          placeholder="Search Teams..."
         />
       </div>
       {isError && <Alert severity="error">{deleteError?.data?.message}</Alert>}
