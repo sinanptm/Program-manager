@@ -6,9 +6,10 @@ export const participantsApiSlice = createApi({
     tagTypes: ['Participants'],
     endpoints: (builder) => ({
         getParticipants: builder.query({
-            query: ({ page = 1, limit = 12 } = {}) => `/participants?page=${page}&limit=${limit}`,
-            providesTags: ['Team', 'Participants'], 
-        }),
+            query: ({ page = 1, limit = 12, category = '', search = '' } = {}) =>
+                `/participants?page=${page}&limit=${limit}&category=${category}&search=${search}`,
+            providesTags: ['Team', 'Participants'],
+        }),        
         addParticipant: builder.mutation({
             query: (participant) => ({
                 url: '/participants',

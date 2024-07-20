@@ -5,11 +5,22 @@ import { Program } from '../models/program.js';
 import { transformId } from '../utils/transformId.js';
 
 export const getParticipants = asyncHandler(async (req, res) => {
-    const page = parseInt(req.query.page, 10) ?? 1;
-    const limit = parseInt(req.query.limit, 10) ?? 12;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 12;
     const skip = (page - 1) * limit;
 
-    let participants = await Participant.find().skip(skip).limit(limit);
+    const categoryFilter = req.query.category || '';
+    const searchFilter = req.query.search || '';
+
+    const filterCriteria = {};
+    if (categoryFilter) {
+        filterCriteria.category = categoryFilter;
+    }
+    if (searchFilter) {
+        filterCriteria.name = { $regex: searchFilter, $options: 'i' };
+    }
+
+    let participants = await Participant.find(filterCriteria).skip(skip).limit(limit);
     participants = transformId(participants);
 
     const participantsWithDetails = await Promise.all(participants.map(async (participant) => {
@@ -36,11 +47,12 @@ export const getParticipants = asyncHandler(async (req, res) => {
         };
     }));
 
-    const totalParticipants = await Participant.countDocuments();
+    const totalParticipants = await Participant.countDocuments(filterCriteria);
     const totalPages = Math.ceil(totalParticipants / limit);
 
     res.status(200).json({ participants: participantsWithDetails, totalPages, currentPage: page });
 });
+
 
 export const addParticipant = asyncHandler(async (req, res) => {
     const { name, team, category } = req.body;

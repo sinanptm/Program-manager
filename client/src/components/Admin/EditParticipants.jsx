@@ -3,7 +3,7 @@ import {
   Typography,
   CircularProgress,
   Box,
-  Button
+  Button,
 } from "@mui/material";
 import { useState, useMemo, useCallback } from "react";
 import {
@@ -16,53 +16,50 @@ import AddProgramToParticipantModal from "../modals/AddProgramToParticipantModal
 import FilterButton from "../FilterButton";
 import SearchInput from "../SearchInput";
 import useDebounce from "../../hooks/useDebounce";
-import AddButton from "../AddButton"; 
+import AddButton from "../AddButton";
 
 const EditParticipants = () => {
   const [page, setPage] = useState(1);
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const limit = 10;
-  const { data, error, isLoading } = useGetParticipantsQuery({ page, limit });
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data, error, isLoading } = useGetParticipantsQuery({
+    page,
+    limit,
+    category: categoryFilter,
+    search: debouncedSearchTerm,
+  });
+
   const [deleteParticipant, { isError, error: deleteError }] =
     useDeleteParticipantMutation();
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openProgramModal, setOpenProgramModal] = useState(false);
   const [selectedParticipantId, setSelectedParticipantId] = useState(null);
-  const [categoryFilter, setCategoryFilter] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handleCloseAddModal = useCallback(() => setOpenAddModal(false), []);
   const handleCloseProgramModal = useCallback(
     () => setOpenProgramModal(false),
     []
   );
+
   const handleCategoryChange = useCallback(
-    (value) => setCategoryFilter(value),
+    (value) => {
+      setCategoryFilter(value);
+      setPage(1); 
+    },
     []
   );
+
   const handleSearchChange = useCallback(
-    (event) => setSearchTerm(event.target.value),
+    (event) => {
+      setSearchTerm(event.target.value);
+      setPage(1); 
+    },
     []
   );
-
-  const filteredParticipants = useMemo(() => {
-    if (!data?.participants) return [];
-
-    return data.participants
-      .filter(
-        (participant) =>
-          categoryFilter === "" || participant.category === categoryFilter
-      )
-      .filter(
-        (participant) =>
-          debouncedSearchTerm === "" ||
-          participant.name
-            .toLowerCase()
-            .includes(debouncedSearchTerm.toLowerCase())
-      )
-      .sort((a, b) => b.points - a.points);
-  }, [data, categoryFilter, debouncedSearchTerm]);
 
   const handleRemove = useCallback(
     async (id) => {
@@ -147,7 +144,7 @@ const EditParticipants = () => {
         </Alert>
       )}
       <ParticipantsList
-        participants={filteredParticipants}
+        participants={data.participants}
         actions={{ remove: true, edit: true, addProgram: true }}
         handleRemove={handleRemove}
         handleAddProgram={handleAddProgram}

@@ -11,15 +11,23 @@ import AddButton from "../AddButton";
 const EditPrograms = () => {
   const [page, setPage] = useState(1);
   const limit = 10;
-  const { data, error, isLoading } = useGetProgramsQuery({ page, limit });
-  const programs = data?.programs;
-  const totalPages = data?.totalPages || 1;
-  const [open, setOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data, error, isLoading } = useGetProgramsQuery({
+    page,
+    limit,
+    status: statusFilter,
+    category: categoryFilter,
+    search: debouncedSearchTerm,
+  });
+
+  const programs = data?.programs;
+  const totalPages = data?.totalPages || 1;
+  const [open, setOpen] = useState(false);
 
   const handleOpen = useCallback(() => setOpen(true), []);
   const handleClose = useCallback(() => setOpen(false), []);
@@ -27,18 +35,6 @@ const EditPrograms = () => {
   const handleStatusChange = useCallback((value) => setStatusFilter(value), []);
   const handleCategoryChange = useCallback((value) => setCategoryFilter(value), []);
   const handleSearchChange = useCallback((event) => setSearchTerm(event.target.value), []);
-
-  const filteredPrograms = useMemo(() => {
-    if (!programs) return [];
-    return programs
-      .filter(
-        (program) =>
-          (statusFilter === "" || program.status === statusFilter) &&
-          (categoryFilter === "" || program.category === categoryFilter) &&
-          (debouncedSearchTerm === "" || program.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
-      )
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  }, [programs, statusFilter, categoryFilter, debouncedSearchTerm]);
 
   const handleNextPage = useCallback(() => {
     if (page < totalPages) setPage(page + 1);
@@ -101,7 +97,7 @@ const EditPrograms = () => {
         </div>
       </div>
       {error && <Alert severity="error">{error}</Alert>}
-      <ProgramList programs={filteredPrograms} isAdmin={true} />
+      <ProgramList programs={programs} isAdmin={true} />
       <Box display="flex" justifyContent="center" mt={2}>
         <Button
           variant="contained"

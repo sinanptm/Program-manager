@@ -10,17 +10,29 @@ export const getPrograms = asyncHandler(async (req, res) => {
     const limit = parseInt(req.query.limit, 10) || 0;
     const skip = (page - 1) * limit;
 
-    const [programs, totalPrograms] = await Promise.all([
-        Program.find().skip(skip).limit(limit),
-        Program.countDocuments()
-    ]);
+    const { status, category, search } = req.query;
+
+    const query = {};
+    if (status) query.status = status;
+    if (category) query.category = category;
+    if (search) query.name = { $regex: search, $options: 'i' };
+
+    const programsPromise = limit > 0 ?
+        Program.find(query).skip(skip).limit(limit) :
+        Program.find(query);
+
+
+    const totalProgramsPromise = Program.countDocuments(query);
+
+    const [programs, totalPrograms] = await Promise.all([programsPromise, totalProgramsPromise]);
 
     res.status(200).json({
         programs: transformId(programs),
-        totalPages: Math.ceil(totalPrograms / limit),
-        currentPage: page
+        totalPages: limit > 0 ? Math.ceil(totalPrograms / limit) : 1,
+        currentPage: page,
     });
 });
+
 
 export const getProgram = asyncHandler(async (req, res) => {
     const { id } = req.params;
