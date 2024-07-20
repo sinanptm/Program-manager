@@ -60,34 +60,44 @@ const ProgramDetails = () => {
   };
 
   return (
-    <Box p={4} className="max-w-4xl mx-auto">
+    <Box className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <Button
         variant="contained"
         color="primary"
         onClick={handleOpenModal}
-        className="mb-4"
+        className="mb-6"
       >
         Set Winners
       </Button>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom className="text-center">
         {name}
       </Typography>
-      <Divider />
-      <Grid container spacing={3} className="mt-4">
+      <Divider className="mb-6" />
+      <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card className="bg-gray-100 shadow-md">
             <CardContent>
-              <Typography variant="h6">Program Details</Typography>
-              <Typography variant="subtitle1">Category: {category}</Typography>
-              <Typography variant="subtitle1">Status: {status}</Typography>
-              <Typography variant="subtitle1">Type: {type}</Typography>
+              <Typography variant="h6" className="text-gray-700">
+                Program Details
+              </Typography>
+              <Typography variant="subtitle1" className="text-gray-600">
+                Category: {category}
+              </Typography>
+              <Typography variant="subtitle1" className="text-gray-600">
+                Status: {status}
+              </Typography>
+              <Typography variant="subtitle1" className="text-gray-600">
+                Type: {type}
+              </Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card className="bg-gray-100 shadow-md">
             <CardContent>
-              <Typography variant="h6">Participants</Typography>
+              <Typography variant="h6" className="text-gray-700">
+                Participants
+              </Typography>
               <List>
                 {data.program.participants.map((participant, index) => (
                   <ListItem key={participant?.id ?? index}>
@@ -102,12 +112,14 @@ const ProgramDetails = () => {
           </Card>
         </Grid>
       </Grid>
-      <Divider className="my-4" />
-      <Grid container spacing={3} className="mt-4">
+      <Divider className="my-6" />
+      <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Card>
+          <Card className="bg-gray-100 shadow-md">
             <CardContent>
-              <Typography variant="h6">Winners</Typography>
+              <Typography variant="h6" className="text-gray-700">
+                Winners
+              </Typography>
               <List>
                 {renderWinnerListItem("1st Place", data.program.firstPlace)}
                 {renderWinnerListItem("2nd Place", data.program.secondPlace)}
