@@ -62,26 +62,25 @@ const EditTeam = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Teams
       </Typography>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        marginBottom="16px"
-      >
-        <AddButton onClick={handleOpen} label="Add" />
-        <SearchInput
-          label="Search"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder="Search Teams..."
-        />
+      <Box display="flex" alignItems="center" justifyContent="space-between" marginBottom="16px">
+        <Box display="flex" flex="1">
+          <AddButton onClick={handleOpen} label="Add" />
+        </Box>
+        <Box display="flex" flex="2" justifyContent="center">
+          <SearchInput
+            label="Search"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Search Teams..."
+          />
+        </Box>
+        <Box flex="1" />
       </Box>
-      {isError ||
-        (error && (
-          <Alert severity="error">
-            {deleteError?.data?.message || error.message}
-          </Alert>
-        ))}
+      {isError || (error && (
+        <Alert severity="error">
+          {deleteError?.data?.message || error.message}
+        </Alert>
+      ))}
       {isLoading || isFetching ? (
         <ListSkeleton rows={10} columns={4} />
       ) : (
