@@ -1,7 +1,6 @@
 import express, { urlencoded, json } from 'express';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import cors from 'cors';
 import { connectDB } from './config/mongo.js';
 import { router } from './routers/routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -12,7 +11,6 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
