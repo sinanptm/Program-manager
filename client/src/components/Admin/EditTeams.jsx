@@ -1,4 +1,9 @@
-import { CircularProgress, Typography, Alert } from "@mui/material";
+import {
+  Alert,
+  Typography,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 import { useState, useMemo, useCallback } from "react";
 import {
   useGetTeamsQuery,
@@ -9,10 +14,14 @@ import useDebounce from "../../hooks/useDebounce";
 import SearchInput from "../SearchInput";
 import AddButton from "../AddButton";
 import AddTeamModal from "../modals/AddTeamModal";
+import Pagination from "../Pagination";  // Import Pagination component
 
 const EditTeam = () => {
-  const { data, error, isLoading } = useGetTeamsQuery();
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const { data, error, isLoading } = useGetTeamsQuery({ page, limit });
   const teams = data?.teams;
+  const totalPages = data?.totalPages || 1;
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -36,6 +45,10 @@ const EditTeam = () => {
     [deleteTeam]
   );
 
+  const handlePageChange = useCallback((newPage) => {
+    setPage(newPage);
+  }, []);
+
   const filteredTeams = useMemo(() => {
     if (!teams) return [];
     return teams
@@ -47,16 +60,14 @@ const EditTeam = () => {
 
   if (isLoading)
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
       >
         <CircularProgress />
-      </div>
+      </Box>
     );
 
   return (
@@ -64,13 +75,11 @@ const EditTeam = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Teams
       </Typography>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          marginBottom: "16px",
-        }}
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        marginBottom="16px"
       >
         <AddButton onClick={handleOpen} label="Add" />
         <SearchInput
@@ -79,16 +88,20 @@ const EditTeam = () => {
           onChange={handleSearchChange}
           placeholder="Search Teams..."
         />
-      </div>
-      {isError ||
-        (error && (
-          <Alert severity="error">{deleteError?.data?.message || error}</Alert>
-        ))}
+      </Box>
+      {isError || (error && (
+        <Alert severity="error">{deleteError?.data?.message || error.message}</Alert>
+      ))}
       <TeamList
         teams={filteredTeams}
         isDelete={true}
         handleRemove={handleRemoveTeam}
         isAdmin={true}
+      />
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
       />
       <AddTeamModal open={open} handleClose={handleClose} />
     </>

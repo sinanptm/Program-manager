@@ -3,7 +3,6 @@ import {
   Typography,
   CircularProgress,
   Box,
-  Button,
 } from "@mui/material";
 import { useState, useCallback } from "react";
 import {
@@ -17,6 +16,7 @@ import FilterButton from "../FilterButton";
 import SearchInput from "../SearchInput";
 import useDebounce from "../../hooks/useDebounce";
 import AddButton from "../AddButton";
+import Pagination from "../Pagination";
 
 const EditParticipants = () => {
   const [page, setPage] = useState(1);
@@ -73,17 +73,9 @@ const EditParticipants = () => {
 
   const handleOpenAddModal = useCallback(() => setOpenAddModal(true), []);
 
-  const handleNextPage = useCallback(() => {
-    if (page < data.totalPages) {
-      setPage(page + 1);
-    }
-  }, [page, data]);
-
-  const handlePreviousPage = useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
+  const handlePageChange = useCallback((newPage) => {
+    setPage(newPage);
+  }, []);
 
   if (isLoading) {
     return (
@@ -143,27 +135,11 @@ const EditParticipants = () => {
         handleRemove={handleRemove}
         handleAddProgram={handleAddProgram}
       />
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handlePreviousPage}
-          disabled={page === 1}
-        >
-          Previous
-        </Button>
-        <Typography variant="body1" mx={2}>
-          Page {page} of {data.totalPages}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNextPage}
-          disabled={page === data.totalPages}
-        >
-          Next
-        </Button>
-      </Box>
+      <Pagination
+        page={page}
+        totalPages={data.totalPages}
+        onPageChange={handlePageChange}
+      />
       <AddParticipantModal
         open={openAddModal}
         handleClose={handleCloseAddModal}

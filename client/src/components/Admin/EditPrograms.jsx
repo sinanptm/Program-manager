@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   Typography,
   CircularProgress,
   Box,
@@ -13,6 +12,7 @@ import FilterButton from "../FilterButton";
 import SearchInput from "../SearchInput";
 import useDebounce from "../../hooks/useDebounce";
 import AddButton from "../AddButton";
+import Pagination from "../Pagination"; 
 
 const EditPrograms = () => {
   const [page, setPage] = useState(1);
@@ -48,26 +48,20 @@ const EditPrograms = () => {
     []
   );
 
-  const handleNextPage = useCallback(() => {
-    if (page < totalPages) setPage(page + 1);
-  }, [page, totalPages]);
-
-  const handlePreviousPage = useCallback(() => {
-    if (page > 1) setPage(page - 1);
-  }, [page]);
+  const handlePageChange = useCallback((newPage) => {
+    setPage(newPage);
+  }, []);
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
       >
         <CircularProgress />
-      </div>
+      </Box>
     );
   }
 
@@ -92,13 +86,11 @@ const EditPrograms = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Programs
       </Typography>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "16px",
-        }}
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        marginBottom="16px"
       >
         <AddButton onClick={handleOpen} label="Add" />
         <SearchInput
@@ -107,7 +99,7 @@ const EditPrograms = () => {
           onChange={handleSearchChange}
           placeholder="Search programs..."
         />
-        <div style={{ display: "flex", gap: "16px" }}>
+        <Box display="flex" gap="16px">
           <FilterButton
             label="Status"
             options={statusOptions}
@@ -120,31 +112,15 @@ const EditPrograms = () => {
             selectedValue={categoryFilter}
             onChange={handleCategoryChange}
           />
-        </div>
-      </div>
-      {error && <Alert severity="error">{error}</Alert>}
-      <ProgramList programs={programs} isAdmin={true} />
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handlePreviousPage}
-          disabled={page === 1}
-        >
-          Previous
-        </Button>
-        <Typography variant="body1" mx={2}>
-          Page {page} of {totalPages}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNextPage}
-          disabled={page === totalPages}
-        >
-          Next
-        </Button>
+        </Box>
       </Box>
+      {error && <Alert severity="error">{error.message}</Alert>}
+      <ProgramList programs={programs} isAdmin={true} />
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
       <AddProgramModal open={open} handleClose={handleClose} />
     </>
   );

@@ -1,7 +1,6 @@
 import {
   CircularProgress,
   Typography,
-  Button,
   Box,
   Alert,
 } from "@mui/material";
@@ -10,6 +9,7 @@ import { useGetTeamsQuery } from "../slices/teamsApiSlice";
 import { useState, useCallback, useMemo } from "react";
 import SearchInput from "../components/SearchInput";
 import useDebounce from "../hooks/useDebounce";
+import Pagination from "../components/Pagination";
 
 const TeamScreen = () => {
   const [page, setPage] = useState(1);
@@ -22,17 +22,9 @@ const TeamScreen = () => {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  const handleNextPage = useCallback(() => {
-    if (page < totalPages) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [page, totalPages]);
-
-  const handlePreviousPage = useCallback(() => {
-    if (page > 1) {
-      setPage((prevPage) => prevPage - 1);
-    }
-  }, [page]);
+  const handlePageChange = useCallback((newPage) => {
+    setPage(newPage);
+  }, []);
 
   const handleSearchChange = useCallback((event) => {
     setSearchTerm(event.target.value);
@@ -78,27 +70,11 @@ const TeamScreen = () => {
         />
       </Box>
       <TeamList teams={sortedTeams} />
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handlePreviousPage}
-          disabled={page === 1}
-        >
-          Previous
-        </Button>
-        <Typography variant="body1" mx={2}>
-          Page {page} of {totalPages}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNextPage}
-          disabled={page === totalPages}
-        >
-          Next
-        </Button>
-      </Box>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
       <br />
       <br />
       <br />
