@@ -8,7 +8,8 @@
     "start": "nodemon server/server.js",
     "server": "nodemon server/server.js",
     "client": "npm run dev --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "keep-alive": "node keepAlive.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run keep-alive\""
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.5",
     "nodemon": "^3.1.4",
-    "react-router-dom": "^6.24.1"
+    "react-router-dom": "^6.24.1",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^3.3.2"
   }
 }
