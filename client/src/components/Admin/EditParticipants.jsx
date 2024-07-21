@@ -1,7 +1,6 @@
 import {
   Alert,
   Typography,
-  CircularProgress,
   Box,
 } from "@mui/material";
 import { useState, useCallback } from "react";
@@ -17,6 +16,7 @@ import SearchInput from "../SearchInput";
 import useDebounce from "../../hooks/useDebounce";
 import AddButton from "../AddButton";
 import Pagination from "../Pagination";
+import ListSkeleton from '../ListSkeleton';
 
 const EditParticipants = () => {
   const [page, setPage] = useState(1);
@@ -26,7 +26,7 @@ const EditParticipants = () => {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  const { data, error, isLoading } = useGetParticipantsQuery({
+  const { data, error, isLoading, isFetching } = useGetParticipantsQuery({
     page,
     limit,
     category: categoryFilter,
@@ -77,19 +77,6 @@ const EditParticipants = () => {
     setPage(newPage);
   }, []);
 
-  if (isLoading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   const categoryOptions = [
     { label: "All", value: "" },
     { label: "LP", value: "lp" },
@@ -129,17 +116,23 @@ const EditParticipants = () => {
           {deleteError?.data?.message ?? error.message}
         </Alert>
       )}
-      <ParticipantsList
-        participants={data.participants}
-        actions={{ remove: true, edit: true, addProgram: true }}
-        handleRemove={handleRemove}
-        handleAddProgram={handleAddProgram}
-      />
-      <Pagination
-        page={page}
-        totalPages={data.totalPages}
-        onPageChange={handlePageChange}
-      />
+      {isLoading || isFetching ? (
+        <ListSkeleton rows={10} columns={6} />
+      ) : (
+        <>
+          <ParticipantsList
+            participants={data.participants}
+            actions={{ remove: true, edit: true, addProgram: true }}
+            handleRemove={handleRemove}
+            handleAddProgram={handleAddProgram}
+          />
+          <Pagination
+            page={page}
+            totalPages={data.totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
       <AddParticipantModal
         open={openAddModal}
         handleClose={handleCloseAddModal}

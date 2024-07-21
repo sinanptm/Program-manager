@@ -1,26 +1,26 @@
-import {
-  CircularProgress,
-  Typography,
-  Box,
-  Alert,
-} from "@mui/material";
+import { Typography, Box, Alert } from "@mui/material";
 import TeamList from "../components/lists/TeamList";
 import { useGetTeamsQuery } from "../slices/teamsApiSlice";
 import { useState, useCallback, useMemo } from "react";
 import SearchInput from "../components/SearchInput";
 import useDebounce from "../hooks/useDebounce";
 import Pagination from "../components/Pagination";
+import ListSkeleton from "../components/ListSkeleton";
 
 const TeamScreen = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const limit = 10;
 
-  const { data, error, isLoading } = useGetTeamsQuery({ page, limit });
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data, error, isLoading, isFetching } = useGetTeamsQuery({
+    page,
+    limit,
+    search: debouncedSearchTerm,
+  });
   const teams = data?.teams || [];
   const totalPages = data?.totalPages || 1;
-
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handlePageChange = useCallback((newPage) => {
     setPage(newPage);
@@ -30,27 +30,9 @@ const TeamScreen = () => {
     setSearchTerm(event.target.value);
   }, []);
 
-  const filteredTeams = useMemo(() => {
-    return teams.filter((team) =>
-      team.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-    );
-  }, [teams, debouncedSearchTerm]);
-
-  if (isLoading)
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-
-  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
-
-  const sortedTeams = [...filteredTeams].sort((a, b) => b.points - a.points);
+  const sortedTeams = useMemo(() => {
+    return [...teams].sort((a, b) => b.points - a.points);
+  }, [teams]);
 
   return (
     <>
@@ -69,12 +51,30 @@ const TeamScreen = () => {
           placeholder="Search teams..."
         />
       </Box>
-      <TeamList teams={sortedTeams} />
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      <Box>
+        {isLoading && <ListSkeleton />}
+        {error && !isLoading && (
+          <Alert severity="error">Error: {error.message}</Alert>
+        )}
+        {isLoading && isFetching ? (
+          <ListSkeleton />
+        ) : (
+          <>
+            <TeamList teams={sortedTeams} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+
+        {!isLoading && !error && teams.length === 0 && (
+          <Typography align="center" variant="body1">
+            No teams found.
+          </Typography>
+        )}
+      </Box>
       <br />
       <br />
       <br />

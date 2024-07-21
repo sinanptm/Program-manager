@@ -1,9 +1,4 @@
-import {
-  Alert,
-  Typography,
-  CircularProgress,
-  Box,
-} from "@mui/material";
+import { Alert, Typography, Box } from "@mui/material";
 import { useState, useMemo, useCallback } from "react";
 import {
   useGetTeamsQuery,
@@ -14,12 +9,16 @@ import useDebounce from "../../hooks/useDebounce";
 import SearchInput from "../SearchInput";
 import AddButton from "../AddButton";
 import AddTeamModal from "../modals/AddTeamModal";
-import Pagination from "../Pagination";  // Import Pagination component
+import Pagination from "../Pagination";
+import ListSkeleton from "../ListSkeleton";
 
 const EditTeam = () => {
   const [page, setPage] = useState(1);
   const limit = 10;
-  const { data, error, isLoading } = useGetTeamsQuery({ page, limit });
+  const { data, error, isLoading, isFetching } = useGetTeamsQuery({
+    page,
+    limit,
+  });
   const teams = data?.teams;
   const totalPages = data?.totalPages || 1;
   const [open, setOpen] = useState(false);
@@ -58,18 +57,6 @@ const EditTeam = () => {
       .sort((a, b) => b.points - a.points);
   }, [teams, debouncedSearchTerm]);
 
-  if (isLoading)
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-
   return (
     <>
       <Typography variant="h4" align="center" gutterBottom>
@@ -89,20 +76,29 @@ const EditTeam = () => {
           placeholder="Search Teams..."
         />
       </Box>
-      {isError || (error && (
-        <Alert severity="error">{deleteError?.data?.message || error.message}</Alert>
-      ))}
-      <TeamList
-        teams={filteredTeams}
-        isDelete={true}
-        handleRemove={handleRemoveTeam}
-        isAdmin={true}
-      />
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {isError ||
+        (error && (
+          <Alert severity="error">
+            {deleteError?.data?.message || error.message}
+          </Alert>
+        ))}
+      {isLoading || isFetching ? (
+        <ListSkeleton rows={10} columns={4} />
+      ) : (
+        <>
+          <TeamList
+            teams={filteredTeams}
+            isDelete={true}
+            handleRemove={handleRemoveTeam}
+            isAdmin={true}
+          />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
       <AddTeamModal open={open} handleClose={handleClose} />
     </>
   );

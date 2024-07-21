@@ -1,23 +1,23 @@
-import {
-  Typography,
-  CircularProgress,
-  Box,
-  Alert,
-} from "@mui/material";
-import { useState, useMemo, useCallback } from "react";
+import { Typography, Box, Alert } from "@mui/material";
+import { useState, useCallback } from "react";
 import { useGetProgramsQuery } from "../slices/programsApiSlice";
 import ProgramList from "../components/lists/ProgramList";
 import SearchInput from "../components/SearchInput";
 import useDebounce from "../hooks/useDebounce";
 import CustomPagination from "../components/Pagination";
+import ListSkeleton from "../components/ListSkeleton";
 
 const ProgramScreen = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const limit = 10;
-  const { data, error, isLoading } = useGetProgramsQuery({ page, limit });
-
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data, error, isLoading, isFetching } = useGetProgramsQuery({
+    page,
+    limit,
+    search: debouncedSearchTerm,
+  });
 
   const programs = data?.programs || [];
   const totalPages = data?.totalPages || 1;
@@ -29,31 +29,6 @@ const ProgramScreen = () => {
   const handleSearchChange = useCallback((event) => {
     setSearchTerm(event.target.value);
   }, []);
-
-  const filteredPrograms = useMemo(() => {
-    return programs.filter(
-      (program) =>
-        debouncedSearchTerm === "" ||
-        program.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-    );
-  }, [programs, debouncedSearchTerm]);
-
-  if (isLoading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return <Alert severity="error">Error: {error.message}</Alert>;
-  }
 
   return (
     <>
@@ -72,12 +47,24 @@ const ProgramScreen = () => {
           placeholder="Search Programs..."
         />
       </Box>
-      <ProgramList programs={filteredPrograms} />
-      <CustomPagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      <Box>
+        {(isLoading || !data) && <ListSkeleton />}
+        {error && !isLoading && (
+          <Alert severity="error">Error: {error.message}</Alert>
+        )}
+        {isLoading && isFetching ? (
+          <ListSkeleton />
+        ) : (
+          <>
+            <ProgramList programs={programs} />
+            <CustomPagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+      </Box>
       <br />
       <br />
       <br />

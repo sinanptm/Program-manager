@@ -6,9 +6,10 @@ export const teamsApiSlice = createApi({
     tagTypes: ['Team'], 
     endpoints: (builder) => ({
         getTeams: builder.query({
-            query: ({ page = 0, limit = 0 } = {}) => `/teams?page=${page}&limit=${limit}`,
+            query: ({ page = 1, limit = 10, search = "" } = {}) => 
+              `/teams?page=${page}&limit=${limit}&search=${search}`, 
             providesTags: ['Team'],
-        }),
+          }),
         addTeam: builder.mutation({
             query: (team) => ({
                 url: '/teams',

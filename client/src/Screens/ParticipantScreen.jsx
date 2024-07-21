@@ -1,10 +1,11 @@
 import { useState, useMemo, useCallback } from "react";
-import { CircularProgress, Typography, Box, Alert } from "@mui/material";
+import { Typography, Box, Alert } from "@mui/material";
 import { useGetParticipantsQuery } from "../slices/participantsApiSlice";
 import ParticipantsList from "../components/lists/ParticipantsList";
-import SearchInput from '../components/SearchInput';
+import SearchInput from "../components/SearchInput";
 import useDebounce from "../hooks/useDebounce";
 import Pagination from "../components/Pagination";
+import ListSkeleton from "../components/ListSkeleton";
 
 const ParticipantScreen = () => {
   const [page, setPage] = useState(1);
@@ -12,7 +13,11 @@ const ParticipantScreen = () => {
   const limit = 10;
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-  const { data, error, isLoading } = useGetParticipantsQuery({ page, limit, search: debouncedSearchTerm });
+  const { data, error, isLoading, isFetching } = useGetParticipantsQuery({
+    page,
+    limit,
+    search: debouncedSearchTerm,
+  });
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -24,20 +29,8 @@ const ParticipantScreen = () => {
 
   const filteredParticipants = useMemo(() => {
     if (!data?.participants) return [];
-
-    return data.participants
-      .filter(
-        (participant) =>
-          debouncedSearchTerm === "" ||
-          participant.name
-            .toLowerCase()
-            .includes(debouncedSearchTerm.toLowerCase())
-      )
-      .sort((a, b) => b.points - a.points);
-  }, [data, debouncedSearchTerm]);
-
-  if (isLoading) return <CircularProgress />;
-  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
+    return [...data.participants].sort((a, b) => b.points - a.points);
+  }, [data]);
 
   return (
     <>
@@ -56,12 +49,20 @@ const ParticipantScreen = () => {
           placeholder="Search Participants..."
         />
       </Box>
-      <ParticipantsList participants={filteredParticipants} />
-      <Pagination
-        page={page}
-        totalPages={data.totalPages}
-        onPageChange={handlePageChange}
-      />
+      {isLoading || isFetching ? (
+        <ListSkeleton rows={10} columns={4} />
+      ) : error ? (
+        <Alert severity="error">Error: {error.message}</Alert>
+      ) : (
+        <>
+          <ParticipantsList participants={filteredParticipants} />
+          <Pagination
+            page={page}
+            totalPages={data.totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -1,7 +1,6 @@
 import {
   Alert,
   Typography,
-  CircularProgress,
   Box,
 } from "@mui/material";
 import { useState, useCallback } from "react";
@@ -12,7 +11,8 @@ import FilterButton from "../FilterButton";
 import SearchInput from "../SearchInput";
 import useDebounce from "../../hooks/useDebounce";
 import AddButton from "../AddButton";
-import Pagination from "../Pagination"; 
+import Pagination from "../Pagination";
+import ListSkeleton from "../ListSkeleton";
 
 const EditPrograms = () => {
   const [page, setPage] = useState(1);
@@ -23,7 +23,7 @@ const EditPrograms = () => {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  const { data, error, isLoading } = useGetProgramsQuery({
+  const { data, error, isLoading, isFetching } = useGetProgramsQuery({
     page,
     limit,
     status: statusFilter,
@@ -51,19 +51,6 @@ const EditPrograms = () => {
   const handlePageChange = useCallback((newPage) => {
     setPage(newPage);
   }, []);
-
-  if (isLoading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   const statusOptions = [
     { label: "None", value: "" },
@@ -115,12 +102,18 @@ const EditPrograms = () => {
         </Box>
       </Box>
       {error && <Alert severity="error">{error.message}</Alert>}
-      <ProgramList programs={programs} isAdmin={true} />
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {isLoading || isFetching ? (
+        <ListSkeleton rows={10} columns={5} />
+      ) : (
+        <>
+          <ProgramList programs={programs} isAdmin={true} />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
       <AddProgramModal open={open} handleClose={handleClose} />
     </>
   );
