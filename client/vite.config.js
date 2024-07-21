@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: "https://sahityotsav-manager.onrender.com",
-        changeOrigin: true
+        changeOrigin: true,
       }
     }
   }

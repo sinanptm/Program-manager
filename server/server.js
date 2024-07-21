@@ -18,7 +18,6 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use('/api', router);
 
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
@@ -28,6 +27,7 @@ if (process.env.NODE_ENV === 'production') {
     app.get('/', (req, res) => res.send("Server is ready"));
 }
 
+app.use('/api', router);
 app.use(errorHandler);
 
 const port = process.env.PORT || 2000;
