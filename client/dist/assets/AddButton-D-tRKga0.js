@@ -1,0 +1,1 @@
+import{j as r,f as o}from"./index-BA-3FFcl.js";const a=({onClick:t,label:n})=>r.jsx(o,{variant:"contained",color:"primary",onClick:t,sx:{textTransform:"none",padding:"8px 16px",fontSize:{xs:"0.75rem",sm:"0.875rem"},"@media (max-width: 600px)":{padding:"6px 12px"}},children:n});export{a as A};

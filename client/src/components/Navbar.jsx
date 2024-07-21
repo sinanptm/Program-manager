@@ -16,6 +16,7 @@ const pages = [
   { name: "Teams", link: "/teams" },
   { name: "Programs", link: "/programs" },
   { name: "Participants", link: "/participants" },
+  { name: "Admin", link: "/admin" },
 ];
 
 function ResponsiveAppBar() {
