@@ -12,9 +12,6 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^3.1.4"
-  },
   "dependencies": {
     "concurrently": "^8.2.2",
     "cookie-parser": "^1.4.6",
@@ -23,6 +20,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.5",
-    "react-router-dom": "^6.24.1"
+    "react-router-dom": "^6.24.1",
+    "nodemon": "^3.1.4"
   }
 }
