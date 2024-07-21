@@ -7,7 +7,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: "https://localhost:4000",
+        target: "https://sahityotsav-manager.onrender.com",
         changeOrigin: true
       }
     }
