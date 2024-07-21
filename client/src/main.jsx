@@ -8,7 +8,7 @@ import App from "./App.jsx";
 import LoadingFallback from "./components/LoadingFallback";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-const TeamsList = lazy(() => import("./screens/TeamsScreen.jsx"));
+// const TeamsList = lazy(() => import("./screens/TeamsScreen.jsx"));
 const ProgramsList = lazy(() => import("./screens/ProgramScreen.jsx"));
 const ParticipantsList = lazy(() => import("./screens/ParticipantScreen.jsx"));
 const Admin = lazy(() => import("./screens/AdminScreen.jsx"));
@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 path="teams"
                 element={
                   <Suspense fallback={<LoadingFallback />}>
-                    <TeamsList />
+                    <ProgramsList />
                   </Suspense>
                 }
               />
