@@ -1,7 +1,4 @@
-import {
-  Alert,
-  Typography,
-} from "@mui/material";
+import { Alert, Typography } from "@mui/material";
 import { useState, useCallback } from "react";
 import { useGetProgramsQuery } from "../../slices/programsApiSlice";
 import ProgramList from "../lists/ProgramList";
@@ -9,7 +6,7 @@ import AddProgramModal from "../modals/AddProgramModal";
 import useDebounce from "../../hooks/useDebounce";
 import Pagination from "../utils/Pagination";
 import ListSkeleton from "../utils/ListSkeleton";
-import Controls from "../utils/Controls"; 
+import ResponsiveToolbar from "../utils/ResponsiveToolbar";
 
 const EditPrograms = () => {
   const [page, setPage] = useState(1);
@@ -70,7 +67,7 @@ const EditPrograms = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Programs
       </Typography>
-      <Controls
+      <ResponsiveToolbar
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
         handleOpen={handleOpen}
