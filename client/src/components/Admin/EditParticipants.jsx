@@ -11,12 +11,12 @@ import {
 import ParticipantsList from "../lists/ParticipantsList";
 import AddParticipantModal from "../modals/AddParticipantModal";
 import AddProgramToParticipantModal from "../modals/AddProgramToParticipantModal";
-import FilterButton from "../FilterButton";
-import SearchInput from "../SearchInput";
+import FilterButton from "../utils/FilterButton";
+import SearchInput from "../utils/SearchInput";
 import useDebounce from "../../hooks/useDebounce";
-import AddButton from "../AddButton";
-import Pagination from "../Pagination";
-import ListSkeleton from '../ListSkeleton';
+import AddButton from "../utils/AddButton";
+import Pagination from "../utils/Pagination";
+import ListSkeleton from '../utils/ListSkeleton';
 
 const EditParticipants = () => {
   const [page, setPage] = useState(1);

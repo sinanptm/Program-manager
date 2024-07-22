@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "../components/Admin/Login";
 import AdminOutlet from "../components/AdminOutlet";
-import LoadingFallback from '../components/LoadingFallback'
+import LoadingFallback from '../components/utils/LoadingFallback'
 
 const EditTeams = lazy(() => import("../components/Admin/EditTeams"));
 const EditParticipants = lazy(() => import("../components/Admin/EditParticipants"));

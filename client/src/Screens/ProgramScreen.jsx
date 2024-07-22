@@ -2,10 +2,10 @@ import { Typography, Box, Alert } from "@mui/material";
 import { useState, useCallback } from "react";
 import { useGetProgramsQuery } from "../slices/programsApiSlice";
 import ProgramList from "../components/lists/ProgramList";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../components/utils/SearchInput";
 import useDebounce from "../hooks/useDebounce";
-import CustomPagination from "../components/Pagination";
-import ListSkeleton from "../components/ListSkeleton";
+import CustomPagination from "../components/utils/Pagination";
+import ListSkeleton from "../components/utils/ListSkeleton";
 
 const ProgramScreen = () => {
   const [page, setPage] = useState(1);

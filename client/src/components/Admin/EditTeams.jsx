@@ -6,11 +6,11 @@ import {
 } from "../../slices/teamsApiSlice";
 import TeamList from "../lists/TeamList";
 import useDebounce from "../../hooks/useDebounce";
-import SearchInput from "../SearchInput";
-import AddButton from "../AddButton";
+import SearchInput from "../utils/SearchInput";
+import AddButton from "../utils/AddButton";
 import AddTeamModal from "../modals/AddTeamModal";
-import Pagination from "../Pagination";
-import ListSkeleton from "../ListSkeleton";
+import Pagination from "../utils/Pagination";
+import ListSkeleton from "../utils/ListSkeleton";
 
 const EditTeam = () => {
   const [page, setPage] = useState(1);

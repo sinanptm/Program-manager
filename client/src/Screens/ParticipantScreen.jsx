@@ -2,10 +2,10 @@ import { useState, useMemo, useCallback } from "react";
 import { Typography, Box, Alert } from "@mui/material";
 import { useGetParticipantsQuery } from "../slices/participantsApiSlice";
 import ParticipantsList from "../components/lists/ParticipantsList";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../components/utils/SearchInput";
 import useDebounce from "../hooks/useDebounce";
-import Pagination from "../components/Pagination";
-import ListSkeleton from "../components/ListSkeleton";
+import Pagination from "../components/utils/Pagination";
+import ListSkeleton from "../components/utils/ListSkeleton";
 
 const ParticipantScreen = () => {
   const [page, setPage] = useState(1);

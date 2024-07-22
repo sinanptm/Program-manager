@@ -1,18 +1,15 @@
 import {
   Alert,
   Typography,
-  Box,
 } from "@mui/material";
 import { useState, useCallback } from "react";
 import { useGetProgramsQuery } from "../../slices/programsApiSlice";
 import ProgramList from "../lists/ProgramList";
 import AddProgramModal from "../modals/AddProgramModal";
-import FilterButton from "../FilterButton";
-import SearchInput from "../SearchInput";
 import useDebounce from "../../hooks/useDebounce";
-import AddButton from "../AddButton";
-import Pagination from "../Pagination";
-import ListSkeleton from "../ListSkeleton";
+import Pagination from "../utils/Pagination";
+import ListSkeleton from "../utils/ListSkeleton";
+import Controls from "../utils/Controls"; 
 
 const EditPrograms = () => {
   const [page, setPage] = useState(1);
@@ -73,34 +70,17 @@ const EditPrograms = () => {
       <Typography variant="h4" align="center" gutterBottom>
         Programs
       </Typography>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        marginBottom="16px"
-      >
-        <AddButton onClick={handleOpen} label="Add" />
-        <SearchInput
-          label="Search"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder="Search programs..."
-        />
-        <Box display="flex" gap="16px">
-          <FilterButton
-            label="Status"
-            options={statusOptions}
-            selectedValue={statusFilter}
-            onChange={handleStatusChange}
-          />
-          <FilterButton
-            label="Category"
-            options={categoryOptions}
-            selectedValue={categoryFilter}
-            onChange={handleCategoryChange}
-          />
-        </Box>
-      </Box>
+      <Controls
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        handleOpen={handleOpen}
+        statusOptions={statusOptions}
+        statusFilter={statusFilter}
+        handleStatusChange={handleStatusChange}
+        categoryOptions={categoryOptions}
+        categoryFilter={categoryFilter}
+        handleCategoryChange={handleCategoryChange}
+      />
       {error && <Alert severity="error">{error.message}</Alert>}
       {isLoading || isFetching ? (
         <ListSkeleton rows={10} columns={5} />

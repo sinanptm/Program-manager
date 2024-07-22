@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button, TextField, Typography, Container } from "@mui/material";
+import { Button, TextField, Typography, Container, Tooltip, IconButton } from "@mui/material";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useLoginMutation } from "../../slices/authApiSlice";
 import { setCredentials } from "../../slices/authSlice";
 import { useDispatch } from "react-redux";
@@ -28,11 +29,16 @@ const Login = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <div style={{ marginTop: "28px" }}>
-        <div style={{ marginBottom: "12px" }}>
-          <Typography component="h1" variant="h5" align="center">
+      <div style={{ marginTop: "28px", textAlign: "center" }}>
+        <div style={{ marginBottom: "12px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <Typography component="h1" variant="h4" align="center" style={{ marginRight: "8px" }}>
             Admin Login
           </Typography>
+          <Tooltip title="Email: admin@gmail.com Password: 1234" placement="right">
+            <IconButton>
+              <InfoOutlinedIcon />
+            </IconButton>
+          </Tooltip>
         </div>
 
         <form onSubmit={handleLogin}>

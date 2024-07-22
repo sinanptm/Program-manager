@@ -7,7 +7,7 @@ const keepAlive = () => {
     .catch(err => console.error(`Error pinging server: ${err.message}`));
 };
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('*/14 * * * *', () => {
   console.log('Pinging server to keep it alive...');
   keepAlive();
 });

@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import LoadingFallback from "./components/LoadingFallback";
+import LoadingFallback from "./components/utils/LoadingFallback";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 const TeamsList = lazy(() => import("./screens/TeamsScreen.jsx"));

@@ -2,10 +2,10 @@ import { Typography, Box, Alert } from "@mui/material";
 import TeamList from "../components/lists/TeamList";
 import { useGetTeamsQuery } from "../slices/teamsApiSlice";
 import { useState, useCallback, useMemo } from "react";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../components/utils/SearchInput";
 import useDebounce from "../hooks/useDebounce";
-import Pagination from "../components/Pagination";
-import ListSkeleton from "../components/ListSkeleton";
+import Pagination from "../components/utils/Pagination";
+import ListSkeleton from "../components/utils/ListSkeleton";
 
 const TeamScreen = () => {
   const [page, setPage] = useState(1);
